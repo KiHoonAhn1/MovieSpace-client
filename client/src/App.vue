@@ -8,7 +8,7 @@
     <!-- 'bg-transparent'가 배경 투명하게 하는 것 -->
     <div id="nav" class="navbar navbar-expand-lg navbar-light bg-transparent">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" style="font-size:30px;" href="#">Navbar</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -22,55 +22,66 @@
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                탐색하기
+                게시판
               </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="#">최근 한줄평</a></li>
                 <li><a class="dropdown-item" href="#">게시판</a></li>
-                <li><hr class="dropdown-divider"></li>
+                <li><hr class="dropdown-divider bg-light"></li>
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
               </ul>
             </li>
           </ul>
-          <router-link to="/movielist" class="nav-link">My list</router-link>
-          <!-- mouseover function 줘야 한다. dropdown 나오는 위치도 이상함 -->
-          <div class="nav-item">
+          <form id="content" class="nav-item">
+            <input type="text" name="input" class="input" id="search-input">
+            <button type="reset" class="search" id="search-btn"></button>
+          </form>
+          <!-- mouseover style을 줘야 한다. -->
+          <div class="nav-item navbar p-0">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              탐색하기
+              <img class="me-2" src="@/assets/img.jpg" style="width:40px; height:40px; border-radius:20px;">user
             </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">최근 한줄평</a></li>
-              <li><a class="dropdown-item" href="#">게시판</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <ul class="dropdown-menu dropdown-menu-end bg-dark mt-4" style="font-size:20px;" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">내 정보</a></li>
+              <li><a class="dropdown-item" href="#">플레이리스트</a></li>
+              <li><hr class="dropdown-divider bg-light"></li>
+              <li><a class="dropdown-item" href="#">로그아웃</a></li>
             </ul>      
           </div>   
         </div>
       </div>
     </div>
     <router-view/>
-    <div id="body">
-      <form id="content">
-        <input type="text" name="input" class="input" id="search-input">
-        <button type="reset" class="search" id="search-btn"></button>
-      </form>
-    </div>
   </div>
   
 </template>
 <script>
+/* 일단 cdn으로 붙여넣었는데 axios오류... 어떡할까... */
+import axios from 'axios'
+
+const URL = 'http://127.0.0.1:8000/movies/'
 
 export default {
-  mounted: function() {
-  const input = document.querySelector("#search-input");
-  const searchBtn = document.querySelector("#search-btn");
-  
-  const expand = () => {
-    searchBtn.classList.toggle("close");
-    input.classList.toggle("square");
-  };
-  searchBtn.addEventListener("click", expand);
+  name: 'App',
+  created: function () {
+    axios.get(URL)
+      .then(response => {
+        console.log(response.data)
+      })
   },
+  mounted: function () {
+    const input = document.querySelector("#search-input");
+    const searchBtn = document.querySelector("#search-btn");
+    
+    const expand = () => {
+      searchBtn.classList.toggle("close");
+      input.classList.toggle("square");
+    };
+    searchBtn.addEventListener("click", expand);
+  },
+    
+  /* 이곳에 methods로 검색 기능 넣어줘야 함 */
+
 }
 
 </script>
@@ -86,7 +97,9 @@ export default {
   }
 
   #nav {
-    padding: 40px;
+    font-size: 15px;
+    padding: 20px;
+    padding-right: 0px;
   }
 
   #nav a {
@@ -100,6 +113,7 @@ export default {
     font-weight: bold;
   }
 
+  /* 비디오 background로 보여주기 */
   #bg-video {
     position: fixed;
     left: 50%;
@@ -116,150 +130,161 @@ export default {
     background-repeat: no-repeat;
   }
 
-#content {
-  position: absolute;
-  height: 50px;
-  width: 300px;
-  margin-left: 170px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+/*  */
+/* 여기부터 Search Box 관련 CSS */
+/*  */
+/* 왜 감싸는 content에 주면 작동하고 input 본인에게 직접 주면 상속된 속성에 먹히는지 질문 */
+/* 추후, absolute 위치와 글씨 크기 조정까지 들어가서 레이아웃을 깔끔하게 만들어야 한다. */
+  #content {
+    text-align: start;
+    position: absolute;
+    height: 50px;
+    width: 300px;
+    margin-left: 170px;
+    top: 77%;
+    right: -20%;
+    transform: translate(-50%, -50%);
+  }
 
-#content.on {
-  -webkit-animation-name: in-out;
-  animation-name: in-out;
-  -webkit-animation-duration: 0.7s;
-  animation-duration: 0.7s;
-  -webkit-animation-timing-function: linear;
-  animation-timing-function: linear;
-  -webkit-animation-iteration-count: 1;
-  animation-iteration-count: 1;
-}
+  #content.on {
+    -webkit-animation-name: in-out;
+    animation-name: in-out;
+    -webkit-animation-duration: 0.7s;
+    animation-duration: 0.7s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+  }
 
-/* 왜 body에 주면 작동하고 본인한테 직접 주면 상속된 속성에 먹히는지 질문 */
-#body {
-  text-align: start;
-}
+  input {
+    text-align: start;
+    box-sizing: border-box;
+    /* 이곳과 search, close, square 등 건드려서 크기 조절 */
+    width: 50px;
+    height: 50px;
+    border: 4px solid #ffffff;
+    border-radius: 50%;
+    background: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: Roboto;
+    outline: 0;
+    -webkit-transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out,
+      padding 0.2s;
+    transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out,
+      padding 0.2s;
+    -webkit-transition-delay: 0.4s;
+    transition-delay: 0.4s;
+    -webkit-transform: translate(-100%, -50%);
+    -ms-transform: translate(-100%, -50%);
+    transform: translate(-100%, -50%);
+  }
 
-input {
-  text-align: start;
-  box-sizing: border-box;
-  width: 50px;
-  height: 50px;
-  border: 4px solid #ffffff;
-  border-radius: 50%;
-  background: none;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 400;
-  font-family: Roboto;
-  outline: 0;
-  -webkit-transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out,
-    padding 0.2s;
-  transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out,
-    padding 0.2s;
-  -webkit-transition-delay: 0.4s;
-  transition-delay: 0.4s;
-  -webkit-transform: translate(-100%, -50%);
-  -ms-transform: translate(-100%, -50%);
-  transform: translate(-100%, -50%);
-}
+  .search {
+    background: none;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    height: 50px;
+    width: 50px;
+    padding: 0;
+    border-radius: 100%;
+    outline: 0;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    -webkit-transition: 0.2s ease-in-out;
+    transition: 0.2s ease-in-out;
+    -webkit-transform: translate(-100%, -50%);
+    -ms-transform: translate(-100%, -50%);
+    transform: translate(-100%, -50%);
+  }
 
-.search {
-  background: none;
-  position: absolute;
-  top: 0px;
-  left: 0;
-  height: 50px;
-  width: 50px;
-  padding: 0;
-  border-radius: 100%;
-  outline: 0;
-  border: 0;
-  color: inherit;
-  cursor: pointer;
-  -webkit-transition: 0.2s ease-in-out;
-  transition: 0.2s ease-in-out;
-  -webkit-transform: translate(-100%, -50%);
-  -ms-transform: translate(-100%, -50%);
-  transform: translate(-100%, -50%);
-}
+  .search:before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 4px;
+    background-color: #fff;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    margin-top: 26px;
+    margin-left: 17px;
+    -webkit-transition: 0.2s ease-in-out;
+    transition: 0.2s ease-in-out;
+  }
 
-.search:before {
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 4px;
-  background-color: #fff;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
-  margin-top: 26px;
-  margin-left: 17px;
-  -webkit-transition: 0.2s ease-in-out;
-  transition: 0.2s ease-in-out;
-}
+  .close {
+    -webkit-transition: 0.4s ease-in-out;
+    transition: 0.4s ease-in-out;
+    -webkit-transition-delay: 0.4s;
+    transition-delay: 0.4s;
+  }
 
-.close {
-  -webkit-transition: 0.4s ease-in-out;
-  transition: 0.4s ease-in-out;
-  -webkit-transition-delay: 0.4s;
-  transition-delay: 0.4s;
-}
+  .close:before {
+    content: "";
+    position: absolute;
+    width: 27px;
+    height: 4px;
+    margin-top: -1px;
+    margin-left: -13px;
+    background-color: #fff;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    -webkit-transition: 0.2s ease-in-out;
+    transition: 0.2s ease-in-out;
+  }
 
-.close:before {
-  content: "";
-  position: absolute;
-  width: 27px;
-  height: 4px;
-  margin-top: -1px;
-  margin-left: -13px;
-  background-color: #fff;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
-  -webkit-transition: 0.2s ease-in-out;
-  transition: 0.2s ease-in-out;
-}
+  .close:after {
+    content: "";
+    position: absolute;
+    width: 27px;
+    height: 4px;
+    background-color: #fff;
+    margin-top: -1px;
+    margin-left: -13px;
+    cursor: pointer;
+    -webkit-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+  }
 
-.close:after {
-  content: "";
-  position: absolute;
-  width: 27px;
-  height: 4px;
-  background-color: #fff;
-  margin-top: -1px;
-  margin-left: -13px;
-  cursor: pointer;
-  -webkit-transform: rotate(-45deg);
-  -ms-transform: rotate(-45deg);
-  transform: rotate(-45deg);
-}
+  .square {
+    box-sizing: border-box;
+    padding: 0 40px 0 10px;
+    width: 300px;
+    height: 50px;
+    border: 4px solid #ffffff;
+    border-radius: 0;
+    background: none;
+    color: #fff;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 400;
+    outline: 0;
+    -webkit-transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out,
+      padding 0.2s;
+    transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out,
+      padding 0.2s;
+    -webkit-transition-delay: 0.4s, 0s, 0.4s;
+    transition-delay: 0.4s, 0s, 0.4s;
+    -webkit-transform: translate(-100%, -50%);
+    -ms-transform: translate(-100%, -50%);
+    transform: translate(-100%, -50%);
+  }
+/*  */
+/* 여기까지 Search Box 관련 CSS */
+/*  */
 
-.square {
-  box-sizing: border-box;
-  padding: 0 40px 0 10px;
-  width: 300px;
-  height: 50px;
-  border: 4px solid #ffffff;
-  border-radius: 0;
-  background: none;
-  color: #fff;
-  font-family: Roboto;
-  font-size: 16px;
-  font-weight: 400;
-  outline: 0;
-  -webkit-transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out,
-    padding 0.2s;
-  transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out,
-    padding 0.2s;
-  -webkit-transition-delay: 0.4s, 0s, 0.4s;
-  transition-delay: 0.4s, 0s, 0.4s;
-  -webkit-transform: translate(-100%, -50%);
-  -ms-transform: translate(-100%, -50%);
-  transform: translate(-100%, -50%);
-}
+/*  */
+/* 여기부터 profile 관련 CSS */
+/*  */
 
-
+/*  */
+/* 여기까지 profile 관련 CSS */
+/*  */
 </style>
