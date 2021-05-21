@@ -25,23 +25,23 @@
     <hr>
     <!-- 나중에 밑에 Genre를 쭉 뿌려주고 각각의 Component에 carousel을 넣어주면 될 것 같다. -->
     <!-- 뿌려주면서 장르를 넘겨주고 받아서 뿌려주면 된다. -->
-    <h1>Genre Movie</h1>
+    <h1>Genre</h1>
     <carousel-3d
     :disable3d="true" 
-    :space="365" 
+    :space="200" 
     :clickable="true" 
     :controls-visible="true"
     :display="10"
     :border="0"
-    :height="400"
-    style="background:transparent;"
+    :height="285"
+    :width="190"
+    style="background-color:transparent;"
     >
-      <slide v-for="(movie, i) in movies" :key="i" :index="i">
+      <slide v-for="(movie, i) in movies" :key="i" :index="i" style="background:transparent;">
         <router-link :to="{name: 'MovieDetail', params: { movie: movie }}">
-          <img :src="getImage(movie.poster_path)" style="width:100%; height:100%;">
+          <img :src="getImage(movie.poster_path)" style="width:100%; height:85%;">
         </router-link>
-        <span class="title">You know</span>
-        <p>You know, being a test pilot isn't always the healthiest business in the world.</p>
+        <span class="title" style="background-color:transparent; font-size:18px;">{{ movie.title }}</span>
       </slide>
     </carousel-3d>
   </div>
