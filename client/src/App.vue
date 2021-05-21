@@ -67,8 +67,10 @@ export default {
     axios.get(URL)
       .then(response => {
         console.log(response.data)
+        this.$store.dispatch('getMovies', response.data)
       })
   },
+  /* DOM이 모두 구성된 후에 인식할 수 있으므로 mounted 사용 */
   mounted: function () {
     const input = document.querySelector("#search-input");
     const searchBtn = document.querySelector("#search-btn");
@@ -79,7 +81,6 @@ export default {
     };
     searchBtn.addEventListener("click", expand);
   },
-    
   /* 이곳에 methods로 검색 기능 넣어줘야 함 */
 
 }
@@ -134,7 +135,7 @@ export default {
 /* 여기부터 Search Box 관련 CSS */
 /*  */
 /* 왜 감싸는 content에 주면 작동하고 input 본인에게 직접 주면 상속된 속성에 먹히는지 질문 */
-/* 추후, absolute 위치와 글씨 크기 조정까지 들어가서 레이아웃을 깔끔하게 만들어야 한다. */
+/* 나중에 absolute 위치와 글씨 크기를 조정해서 레이아웃을 깔끔하게 만들어야 한다. */
   #content {
     text-align: start;
     position: absolute;

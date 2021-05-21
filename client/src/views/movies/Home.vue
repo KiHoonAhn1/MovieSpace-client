@@ -1,36 +1,82 @@
 <template>
-  <div class="text-white border border-4">
-    Popular Movie
-    <MovieCard 
-    />
+  <div class="text-white mx-3" style="height:1000px">
+    <h1>Popular Movies</h1>
+    <carousel-3d 
+    :controls-visible="true" 
+    :controls-prev-html="'&#10092;'" 
+    :controls-next-html="'&#10093;'" 
+    :controls-width="50"
+    :controls-height="90"
+    :width="360"
+    :height="540"
+    :display="11"
+    :clickable="true"
+    :draggable="true"
+    :loop="false"
+    :border="0"
+    :animationSpeed="300"
+    style="background:transparent;">
+      <slide v-for="(movie, idx) in movies" :key="idx" :index="idx">
+        <figure style="height:100%">
+          <img :src="getImage(movie.poster_path)" style="height:100%">
+        </figure>
+      </slide>
+    </carousel-3d>
+    <hr>
+    <!-- 나중에 밑에 Genre를 쭉 뿌려주고 각각의 Component에 carousel을 넣어주면 될 것 같다. -->
+    <!-- 뿌려주면서 장르를 넘겨주고 받아서 뿌려주면 된다. -->
+    <h1>Genre Movie</h1>
+    <carousel-3d
+    :disable3d="true" 
+    :space="365" 
+    :clickable="true" 
+    :controls-visible="true"
+    :display="10"
+    :border="0"
+    :height="400"
+    style="background:transparent;"
+    >
+      <slide v-for="(movie, i) in movies" :key="i" :index="i">
+        <router-link :to="{name: 'MovieDetail', params: { movie: movie }}">
+          <img :src="getImage(movie.poster_path)" style="width:100%; height:100%;">
+        </router-link>
+        <span class="title">You know</span>
+        <p>You know, being a test pilot isn't always the healthiest business in the world.</p>
+      </slide>
+    </carousel-3d>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import MovieCard from '@/components/movies/MovieCard.vue'
+import { Carousel3d, Slide } from 'vue-carousel-3d'
 
 export default {
   name: 'Home',
   components: {
-    MovieCard,
+    Carousel3d,
+    Slide
   },
   data: function () {
     return {
-
+      
     }
   },
   computed: {
     ...mapState ([
       'movies',
-    ])
+    ]),
   },
-  // methods: {
-
-  // }
+  methods: {
+    getImage: function (url) {
+      return 'https://image.tmdb.org/t/p/original'+ url
+    },
+  }
 }
 </script>
 
-<style>
-
+<style scoped>
+  .carousel-3d-slide {
+    font-size: 22px; 
+  }
 </style>
