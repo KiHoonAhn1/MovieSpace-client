@@ -6,62 +6,54 @@
             <input name="username" type="text" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="아이디" v-model="credentials.username">
         </div>
         <div class="input-group tm-mb-30">
-            <input name="password" type="password" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="비밀번호" v-model="credentials.password">
-        </div>
-        <div class="input-group tm-mb-30">
-            <input name="passwordConfirmation" type="password" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="비밀번호 확인" v-model="credentials.passwordConfirmation">
-        </div>
-        <div class="input-group tm-mb-30">
-            <input name="lastname" type="text" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="이름" v-model="credentials.lastname">
-        </div>
-        <div class="input-group tm-mb-30">
-            <input name="birth" type="date" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="생일" v-model="credentials.birth">
+            <input name="password" type="password" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="비밀번호" v-model="credentials.password"  @keyup.enter="login(credentials)">
         </div>
         <div class="input-group justify-content-end">
-            <input type="button" class="btn btn-primary tm-btn-pad-2" value="Send" @click="signup(credentials)">
+            <input type="button" class="btn btn-primary tm-btn-pad-2" value="Send" @click="login(credentials)">
         </div>
       </div>
     </div>
-  </div>           
+  </div>
 </template>
 
 <script>
 import axios from 'axios'
 
 export default {
-  name: 'Signup',
+  name: "Login",
   data: function () {
     return {
       credentials: {
         username: null,
         password: null,
-        passwordConfirmation: null,
-        lastname: null,
-        birth: null,
       }
     }
   },
   methods: {
-    signup: function () {
+    login: function () {
       axios({
         method: 'post',
-        url: 'http://127.0.0.1:8000/accounts/signup/',
+        url: 'http://127.0.0.1:8000/accounts/api-token-auth/',
         data: this.credentials,
       })
         .then(res => {
           console.log(res)
-          this.$router.push({ name: 'Login' })
+          localStorage.setItem('jwt', res.data.token)
+          this.$emit('login')
+          this.$store.dispatch()
+          console.log(this.credentials.username)
+          this.$router.push({ name: 'Home' })
         })
         .catch(err => {
           console.log(err)
         })
-    },
-  },
-
+    }
+  }
 }
 </script>
-<style scoped>
-/* Signup CSS Start */
+
+<style>
+/* Login CSS Start */
 .tm-contact-left {
     padding-right: 55px;
 }
@@ -122,5 +114,5 @@ export default {
 input:focus::placeholder {
   color: grey;
 }
-/* Signup CSS end */
+/* Login CSS end */
 </style>

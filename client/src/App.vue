@@ -39,23 +39,34 @@
             <button type="reset" class="search" id="search-btn"></button>
           </form>
           <!-- mouseover style을 줘야 한다. -->
-          <div class="nav-item navbar p-0">
+          <div class="nav-item navbar p-0" v-if="isLogin">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img class="me-2" src="@/assets/img.jpg" style="width:40px; height:40px; border-radius:20px;">user
+              <img class="me-2" src="@/assets/img.jpg" style="width:40px; height:40px; border-radius:20px;"> {{ username }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end bg-dark mt-4" style="font-size:20px;" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="#">내 정보</a></li>
               <li><a class="dropdown-item" href="#">플레이리스트</a></li>
               <li><hr class="dropdown-divider bg-light"></li>
-              <li><a class="dropdown-item" href="#">로그아웃</a></li>
-            </ul>      
-          </div>   
+              <li>
+                <a @click="logout" class="dropdown-item" href="#">로그아웃</a>
+              </li>
+            </ul>
+          </div>
+          <span v-else class="nav-item navbar">
+            <ul class="navbar">
+              <li class="navbar-nav">
+                <router-link to="/login" class="nav-link">로그인</router-link>
+              </li>
+              <li class="navbar-nav">
+                <router-link to="/signup" class="nav-link">회원가입</router-link>
+              </li>
+            </ul>
+          </span>   
         </div>
       </div>
     </div>
-    <router-view/>
+    <router-view @login="isLogin = true" />
   </div>
-  
 </template>
 <script>
 /* 일단 cdn으로 붙여넣었는데 axios오류... 어떡할까... */
@@ -65,6 +76,12 @@ const URL = 'http://127.0.0.1:8000/movies/'
 
 export default {
   name: 'App',
+  data: function () {
+    return {
+      isLogin: false,
+      username: 'user',
+    }
+  },
   created: function () {
     axios.get(URL)
       .then(response => {
@@ -83,6 +100,13 @@ export default {
     };
     searchBtn.addEventListener("click", expand);
   },
+  methods: {
+    logout: function () {
+      this.isLogin = false
+      localStorage.removeItem('jwt')
+      this.$router.push({ name: 'Login' })
+    }
+  }
   /* 이곳에 methods로 검색 기능 넣어줘야 함 */
 
 }
@@ -95,8 +119,9 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
-    color: dark;
+    /* color: #2c3e50; */
+    /* 혹시 몰라 위에 color 안 지움. */
+    color: white;
   }
 
   #nav {
@@ -160,7 +185,7 @@ export default {
     animation-iteration-count: 1;
   }
 
-  input {
+  #search-input {
     text-align: start;
     box-sizing: border-box;
     /* 이곳과 search, close, square 등 건드려서 크기 조절 */

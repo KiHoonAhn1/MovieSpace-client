@@ -1,5 +1,5 @@
 <template>
-  <div class="text-white mx-3" style="height:1000px">
+  <div class="text-white mx-3">
     <h1>Popular Movies</h1>
     <carousel-3d 
     :controls-visible="true" 
