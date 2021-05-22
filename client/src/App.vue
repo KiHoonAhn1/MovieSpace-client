@@ -26,7 +26,9 @@
               </a>
               <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="#">최근 한줄평</a></li>
-                <li><a class="dropdown-item" href="#">게시판</a></li>
+                <li>
+                  <router-link to="/articleList" class="nav-link">게시판</router-link>
+                </li>
                 <li><hr class="dropdown-divider bg-light"></li>
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
               </ul>

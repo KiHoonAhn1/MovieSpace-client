@@ -28,13 +28,13 @@
     <h1>Genre</h1>
     <carousel-3d
     :disable3d="true" 
-    :space="200" 
+    :space="310" 
     :clickable="true" 
     :controls-visible="true"
     :display="10"
     :border="0"
-    :height="285"
-    :width="190"
+    :height="200"
+    :width="300"
     style="background-color:transparent;"
     >
       <slide v-for="(movie, i) in movies" :key="i" :index="i" style="background:transparent;">

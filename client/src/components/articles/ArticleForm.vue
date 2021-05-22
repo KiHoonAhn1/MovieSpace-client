@@ -1,13 +1,12 @@
 <template>
-  <div class="text-white">
-    Article
+  <div>
+    <input type="text" name="" id="">
   </div>
 </template>
 
 <script>
 export default {
-  name: 'ArticleList',
-  
+
 }
 </script>
 
