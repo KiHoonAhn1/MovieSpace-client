@@ -26,7 +26,8 @@ export default {
       credentials: {
         username: null,
         password: null,
-      }
+      },
+      username: '',
     }
   },
   methods: {
@@ -37,12 +38,18 @@ export default {
         data: this.credentials,
       })
         .then(res => {
-          console.log(res)
           localStorage.setItem('jwt', res.data.token)
           this.$emit('login')
-          this.$store.dispatch()
-          console.log(this.credentials.username)
           this.$router.push({ name: 'Home' })
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      // user 프로필을 받아서 state에 담아주자
+      axios.get(`http://127.0.0.1:8000/accounts/${this.credentials.username}`)
+        .then(res => {
+          this.$store.dispatch('getUser', res.data)
+          console.log(res)
         })
         .catch(err => {
           console.log(err)
@@ -52,7 +59,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 /* Login CSS Start */
 .tm-contact-left {
     padding-right: 55px;

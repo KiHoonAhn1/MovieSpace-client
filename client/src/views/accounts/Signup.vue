@@ -3,22 +3,22 @@
     <div class="row justify-content-center">
       <div class="col-md-5">
         <div class="input-group tm-mb-30">
-            <input name="username" type="text" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="아이디" v-model="credentials.username">
+          <input name="username" type="text" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="아이디" v-model="credentials.username" required>
         </div>
         <div class="input-group tm-mb-30">
-            <input name="password" type="password" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="비밀번호" v-model="credentials.password">
+          <input name="password" type="password" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="비밀번호" v-model="credentials.password" required>
         </div>
         <div class="input-group tm-mb-30">
-            <input name="passwordConfirmation" type="password" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="비밀번호 확인" v-model="credentials.passwordConfirmation">
+          <input name="passwordConfirmation" type="password" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="비밀번호 확인" v-model="credentials.passwordConfirmation" required>
         </div>
         <div class="input-group tm-mb-30">
-            <input name="lastname" type="text" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="이름" v-model="credentials.lastname">
+          <input name="lastname" type="text" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="이름" v-model="credentials.last_name" required>
         </div>
         <div class="input-group tm-mb-30">
-            <input name="birth" type="date" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="생일" v-model="credentials.birth">
+          <input name="birth" type="date" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="생일" v-model="credentials.birth" required>
         </div>
         <div class="input-group justify-content-end">
-            <input type="button" class="btn btn-primary tm-btn-pad-2" value="Send" @click="signup(credentials)">
+          <input type="button" class="btn btn-primary tm-btn-pad-2" value="Send" @click="signup(credentials)">
         </div>
       </div>
     </div>
@@ -36,21 +36,46 @@ export default {
         username: null,
         password: null,
         passwordConfirmation: null,
-        lastname: null,
+        last_name: null,
         birth: null,
       }
     }
   },
   methods: {
-    signup: function () {
-      axios({
+    // 왜 send 버튼을 누르는데 한번에 이동되지 않고 2번 클릭해야 넘어갈까?
+    async signup () {
+      await axios({
         method: 'post',
         url: 'http://127.0.0.1:8000/accounts/signup/',
         data: this.credentials,
       })
         .then(res => {
           console.log(res)
-          this.$router.push({ name: 'Login' })
+        })
+        .catch(err => {
+          console.log(err)
+          alert('정보를 모두 입력해주세요.')
+        })
+      // signup 후 login 진행
+      // 2번에 걸쳐서 따로 하는 것 말고 더 좋은 방법이 있으면 수정
+      await axios({
+        method: 'post',
+        url: 'http://127.0.0.1:8000/accounts/api-token-auth/',
+        data: this.credentials,
+      })
+        .then(res => {
+          localStorage.setItem('jwt', res.data.token)
+          this.$emit('login')
+          this.$router.push({ name: 'Home' })
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      // axios 요청을 너무 많이 보내는 것 같은데 괜찮을지 질문.
+      await axios.get(`http://127.0.0.1:8000/accounts/${this.credentials.username}`)
+        .then(res => {
+          this.$store.dispatch('getUser', res.data)
+          console.log(res)
         })
         .catch(err => {
           console.log(err)

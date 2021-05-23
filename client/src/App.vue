@@ -25,23 +25,25 @@
                 게시판
               </a>
               <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">최근 한줄평</a></li>
                 <li>
-                  <router-link to="/articleList" class="nav-link">게시판</router-link>
+                  <a class="dropdown-item" href="#">최근 한줄평</a>
+                </li>
+                <li>
+                  <router-link to="/articleList" class="dropdown-item">게시판</router-link>
                 </li>
                 <li><hr class="dropdown-divider bg-light"></li>
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
               </ul>
             </li>
           </ul>
-          <form id="content" class="nav-item">
-            <input type="text" name="input" class="input" id="search-input">
+          <form id="search-content" class="nav-item">
+            <input type="text" name="input" class="search-input" id="search-input">
             <button type="reset" class="search" id="search-btn"></button>
           </form>
           <!-- mouseover style을 줘야 한다. -->
           <div class="nav-item navbar p-0" v-if="isLogin">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img class="me-2" src="@/assets/img.jpg" style="width:40px; height:40px; border-radius:20px;"> {{ username }}
+              <img class="me-2" src="@/assets/img.jpg" style="width:40px; height:40px; border-radius:20px;"> {{ user.username }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end bg-dark mt-4" style="font-size:20px;" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="#">내 정보</a></li>
@@ -71,6 +73,7 @@
 <script>
 /* 일단 cdn으로 붙여넣었는데 axios오류... 어떡할까... */
 import axios from 'axios'
+import { mapState } from 'vuex'
 
 const URL = 'http://127.0.0.1:8000/movies/'
 
@@ -88,6 +91,11 @@ export default {
         console.log(response.data)
         this.$store.dispatch('getMovies', response.data)
       })
+    // token이 있으면 로그인 처리
+    const token = localStorage.getItem('jwt')
+    if (token) {
+      this.isLogin = true
+    }
   },
   /* DOM이 모두 구성된 후에 인식할 수 있으므로 mounted 사용 */
   mounted: function () {
@@ -106,8 +114,13 @@ export default {
       localStorage.removeItem('jwt')
       this.$router.push({ name: 'Login' })
     }
-  }
-  /* 이곳에 methods로 검색 기능 넣어줘야 함 */
+    /* 이곳에 methods로 검색 기능 넣어줘야 함 */
+  },
+  computed: {
+    ...mapState ([
+      'user',
+    ]),
+  },
 
 }
 
@@ -163,7 +176,7 @@ export default {
 /*  */
 /* 왜 감싸는 content에 주면 작동하고 input 본인에게 직접 주면 상속된 속성에 먹히는지 질문 */
 /* 나중에 absolute 위치와 글씨 크기를 조정해서 레이아웃을 깔끔하게 만들어야 한다. */
-  #content {
+  #search-content {
     text-align: start;
     position: absolute;
     height: 50px;
@@ -174,7 +187,7 @@ export default {
     transform: translate(-50%, -50%);
   }
 
-  #content.on {
+  #search-content.on {
     -webkit-animation-name: in-out;
     animation-name: in-out;
     -webkit-animation-duration: 0.7s;
@@ -185,7 +198,7 @@ export default {
     animation-iteration-count: 1;
   }
 
-  #search-input {
+  .search-input {
     text-align: start;
     box-sizing: border-box;
     /* 이곳과 search, close, square 등 건드려서 크기 조절 */
