@@ -30,6 +30,7 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
 import axios from 'axios'
+import { mapState } from 'vuex'
 // const SERVER_URL = process.env.VUE_APP_SERVER_URL
 export default {
   name: 'MovieDetail',
@@ -85,6 +86,9 @@ export default {
     youtubeVideoSrc: function () {
       return `http://www.youtube.com/embed/${this.movieVideo}?enablejsapi=1&origin=http://example.com`
     },
+    ...mapState ([
+      'user',
+    ])
   },
   methods: {
     setToken: function () {
@@ -92,7 +96,6 @@ export default {
       const config = {
         Authorization: `JWT ${token}`
       }
-      console.log(config)
       return config
     },
     // similar movie 이미지 포스터 가져오기
@@ -116,10 +119,10 @@ export default {
       const reviewScore = {
         content : this.content,
         score : this.score,
-        user: '', 
-        movie: '',
+        user: this.user.id,
+        movie: this.movie.id,
       }
-      console.log(reviewScore)
+      // console.log(reviewScore)
       axios({
         method: 'post',
         url: `http://127.0.0.1:8000/movies/${this.movie.id}/review/`,
@@ -127,7 +130,11 @@ export default {
         headers: this.setToken()
       })
         .then((res)=> {
+          console.log(res)
           this.getReviews()
+        })
+        .catch(err => {
+          console.log(err)
         })
 
     },

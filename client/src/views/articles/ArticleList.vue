@@ -5,122 +5,75 @@
         <table class="table table-striped custom-table">
           <thead>
             <tr>
-              <th scope="col">Order</th>
-              <th scope="col">Name</th>
-              <th scope="col">Occupation</th>
-              <th scope="col">Contact</th>
-              <th scope="col">Education</th>
-              <th scope="col"></th>
+              <th>gd</th>
             </tr>
           </thead>
           <tbody>
-            <tr scope="row">
-                      <td>
-                        1392
-                      </td>
-                      <td><a href="#">James Yates</a></td>
-                      <td>
-                        Web Designer
-                        <small class="d-block">Far far away, behind the word mountains</small>
-                      </td>
-                      <td>+63 983 0962 971</td>
-                      <td>NY University</td>
-                      <td><a href="#" class="more">Details</a></td>
-            
-            </tr>
-
             <tr>
-              
-              <td>4616</td>
-              <td><a href="#">Matthew Wasil</a></td>
-              <td>
-                Graphic Designer
-                <small class="d-block">Far far away, behind the word mountains</small>
-              </td>
-              <td>+02 020 3994 929</td>
-              <td>London College</td>
-              <td><a href="#" class="more">Details</a></td>
+              <td>gd</td>
             </tr>
-            <tr>
-              
-              <td>9841</td>
-              <td><a href="#">Sampson Murphy</a></td>
-              <td>
-                Mobile Dev
-                <small class="d-block">Far far away, behind the word mountains</small>
-              </td>
-              <td>+01 352 1125 0192</td>
-              <td>Senior High</td>
-              <td><a href="#" class="more">Details</a></td>
-            </tr>
-            <tr>
-              
-              <td>9548</td>
-              <td><a href="#">Gaspar Semenov</a></td>
-              <td>
-                Illustrator
-                <small class="d-block">Far far away, behind the word mountains</small>
-              </td>
-              <td>+92 020 3994 929</td>
-              <td>College</td>
-              <td><a href="#" class="more">Details</a></td>
-            </tr>
-
-            <tr>
-              
-              <td>4616</td>
-              <td><a href="#">Matthew Wasil</a></td>
-              <td>
-                Graphic Designer
-                <small class="d-block">Far far away, behind the word mountains</small>
-              </td>
-              <td>+02 020 3994 929</td>
-              <td>London College</td>
-              <td><a href="#" class="more">Details</a></td>
-            </tr>
-            <tr>
-              
-              <td>9841</td>
-              <td><a href="#">Sampson Murphy</a></td>
-              <td>
-                Mobile Dev
-                <small class="d-block">Far far away, behind the word mountains</small>
-              </td>
-              <td>+01 352 1125 0192</td>
-              <td>Senior High</td>
-              <td><a href="#" class="more">Details</a></td>
-            </tr>
-            <tr>
-              
-              <td>9548</td>
-              <td><a href="#">Gaspar Semenov</a></td>
-              <td>
-                Illustrator
-                <small class="d-block">Far far away, behind the word mountains</small>
-              </td>
-              <td>+92 020 3994 929</td>
-              <td>College</td>
-              <td><a href="#" class="more">Details</a></td>
-            </tr>
-            
           </tbody>
         </table>
+        <!-- <table class="table table-striped custom-table">
+        </table> -->
+        <b-table 
+          id="my-table"
+          :items="items"
+          :fields="['id', 'title', 'user_id', 'created_at']"
+          :per-page="perPage"
+          :current-page="currentPage"
+          class="table table-striped custom-table"
+          small>
+        </b-table>
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="rows"
+          :per-page="perPage"
+          aria-controls="my-table"
+          align="center"
+        >
+        </b-pagination>
       </div>
-
-
     </div>
-
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
+// const URL = 'http://127.0.0.1:8000/community/'
+
 export default {
   name: 'ArticleList',
-  
+  data: function () {
+    return {
+      perPage: 10,
+      currentPage: 1,
+      items: []
+    }
+  },
+  computed: {
+    rows() {
+      return this.items.length
+    }
+  },
+  created: function () {
+    axios.get('http://127.0.0.1:8000/community')
+      .then(res => {
+        this.items = res.data
+      })
+  },
+  mounted: function () {
+    
+  },
 }
 </script>
 
 <style scoped>
+#my-table {
+  color:white;
+}
+
 body {
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   background-color: #3c373e;

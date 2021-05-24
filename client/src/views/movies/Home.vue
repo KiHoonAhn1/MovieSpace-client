@@ -30,7 +30,7 @@
     :disable3d="true" 
     :space="310" 
     :clickable="true" 
-    :controls-visible="true"
+    :controls-visible="true" 
     :display="10"
     :border="0"
     :height="200"

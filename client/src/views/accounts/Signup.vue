@@ -43,8 +43,8 @@ export default {
   },
   methods: {
     // 왜 send 버튼을 누르는데 한번에 이동되지 않고 2번 클릭해야 넘어갈까?
-    async signup () {
-      await axios({
+    signup: function () {
+      axios({
         method: 'post',
         url: 'http://127.0.0.1:8000/accounts/signup/',
         data: this.credentials,
@@ -58,7 +58,7 @@ export default {
         })
       // signup 후 login 진행
       // 2번에 걸쳐서 따로 하는 것 말고 더 좋은 방법이 있으면 수정
-      await axios({
+      axios({
         method: 'post',
         url: 'http://127.0.0.1:8000/accounts/api-token-auth/',
         data: this.credentials,
@@ -72,7 +72,7 @@ export default {
           console.log(err)
         })
       // axios 요청을 너무 많이 보내는 것 같은데 괜찮을지 질문.
-      await axios.get(`http://127.0.0.1:8000/accounts/${this.credentials.username}`)
+      axios.get(`http://127.0.0.1:8000/accounts/${this.credentials.username}`)
         .then(res => {
           this.$store.dispatch('getUser', res.data)
           console.log(res)

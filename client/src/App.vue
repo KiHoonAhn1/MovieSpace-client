@@ -3,7 +3,7 @@
   <div id="app">
     <!-- style을 줘서 해결을 하긴 했는데 글씨가 잘 안 보이는 문제가 있다. -->
     <video autoplay muted loop id="bg-video">
-      <source src="@/assets/gfp-astro-timelapse.mp4" type="video/mp4">
+      <source src="@/assets/v1.mp4" type="video/mp4">
     </video>
     <!-- 'bg-transparent'가 배경 투명하게 하는 것 -->
     <div id="nav" class="navbar navbar-expand-lg navbar-light bg-transparent">
@@ -30,6 +30,9 @@
                 </li>
                 <li>
                   <router-link to="/articleList" class="dropdown-item">게시판</router-link>
+                </li>
+                <li>
+                  <router-link to="/articleList2" class="dropdown-item">게시판2</router-link>
                 </li>
                 <li><hr class="dropdown-divider bg-light"></li>
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
@@ -165,7 +168,7 @@ export default {
     min-height: 100%;
     transform: translateX(-50%) translateY(-50%);
     z-index: -100;
-    background-image: url(assets/tm-astro-bg.jpg);
+    background-image: url(assets/astro.jpg);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
