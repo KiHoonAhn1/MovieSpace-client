@@ -30,12 +30,12 @@ export default {
         username: null,
         password: null,
       },
-      username: '',
+      token: '',
     }
   },
   methods: {
-    login: function () {
-      axios({
+    login: async function () {
+      await axios({
         method: 'post',
         url: 'http://127.0.0.1:8000/accounts/api-token-auth/',
         data: this.credentials,
@@ -44,17 +44,15 @@ export default {
           localStorage.setItem('jwt', res.data.token)
           this.$emit('login')
           this.$router.push({ name: 'Home' })
-          return res.data.token
+          this.token = res.data.token
         })
+        .catch(err => {
+          console.log(err)
+        })
+      const decode = jwt.verify(this.token, secretkey)
+      await axios.get(`http://127.0.0.1:8000/accounts/${decode.username}`)
         .then(res => {
-          const decode = jwt.verify(res, secretkey)
-          axios.get(`http://127.0.0.1:8000/accounts/${decode.username}`)
-            .then(res => {
-              this.$store.dispatch('getUser', res.data)
-            })
-            .catch(err => {
-              console.log(err)
-            })
+          this.$store.dispatch('getUser', res.data)
         })
         .catch(err => {
           console.log(err)

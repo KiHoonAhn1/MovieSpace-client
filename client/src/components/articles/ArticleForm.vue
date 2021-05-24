@@ -4,11 +4,11 @@
     <form method="post" action="#">
       <div class="field">
         <label for="demo-name" class="text-start fs-3 my-2">Title</label>
-        <input type="text" name="demo-name" id="demo-name" value="" placeholder="제목을 입력해주세요" class="mb-5" />
+        <input type="text" name="demo-name" id="demo-name" value="" placeholder="제목을 입력해주세요" class="mb-5" v-model.trim="article.title" />
       </div>
       <div class="field">
         <label for="demo-message" class="text-start fs-3 my-2">Content</label>
-        <textarea name="demo-message" id="demo-message" placeholder="내용을 입력해주세요." rows="8" class="mb-5"></textarea>
+        <textarea name="demo-message" id="demo-message" placeholder="내용을 입력해주세요." rows="8" class="mb-5" v-model.trim="article.content"></textarea>
       </div>
       <div class="fields">
         <div class="field third">
@@ -17,16 +17,41 @@
         </div>
       </div>
       <ul class="actions button-ul">
-        <li><input type="submit" value="Send Message" class="primary color2 buttons" /></li>
-        <li><input type="reset" value="Reset" class="buttons" /></li>
+        <li><input type="submit" value="작성" class="primary color2 buttons" @submit="createArticle" /></li>
+        <li><router-link to="articleList"><input type="reset" value="취소" class="buttons" /></router-link></li>
       </ul>
     </form>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'ArticleForm',
+  data: function () {
+    return {
+      article: {
+        title: '',
+        content: '',
+      }
+    }
+  },
+  methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+    createArticle: function () {
+      axios ({
+        method: 'post',
+
+      })
+    }
+  }
 }
 </script>
 
