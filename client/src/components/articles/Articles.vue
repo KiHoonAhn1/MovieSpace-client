@@ -36,16 +36,33 @@ export default {
       items: []
     }
   },
+  methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+  },
+  mounted: function () {
+    axios({
+      method: 'get',
+      url: 'http://127.0.0.1:8000/community/',
+      data: {},
+      headers: this.setToken(),
+      })
+        .then(res => {
+          this.items = res.data
+      })
+        .catch(err => {
+          console.log(err)
+        })
+  },
   computed: {
     rows() {
       return this.items.length
     }
-  },
-  created: function () {
-    axios.get('http://127.0.0.1:8000/community')
-      .then(res => {
-        this.items = res.data
-      })
   },
 }
 </script>
