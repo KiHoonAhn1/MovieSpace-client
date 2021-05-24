@@ -6,7 +6,7 @@
       </div>
       <div class="p-4">
         <h3>비슷한 영화</h3>
-        <div v-for="video in similarVideo" v-bind:key="video.id" class="d-flex" @click="toDetail(video)">
+        <div v-for="video in similarVideo" v-bind:key="video.id" class="d-flex" @click="toDetail(video.id)">
           <img :src="getImage(video.poster_path)" style="width:80px; height:100px;">
           <div>{{ video.title }}</div>
         </div>
@@ -19,18 +19,42 @@
     </div>
     <div>
       <div>
-        <input type="number" v-model.trim="score">
-        <input type="text" v-model.trim="content" @keyup.enter="createReview">
-        <div v-for="review in reviewList" v-bind:key="review.id">
-          <div>{{ review.username }}</div>
-          <div>{{ review.score }}</div>
-          <div>{{ review.content }}</div>
-          <div>{{ review.updated_at }}</div>
+        <div class="d-flex">
+          <div class="star-rating space-x-4">
+            <input type="radio" id="5-stars" name="rating" value="5" v-model="score"/>
+            <label for="5-stars" class="star pr-4">★</label>
+            <input type="radio" id="4-stars" name="rating" value="4" v-model="score"/>
+            <label for="4-stars" class="star">★</label>
+            <input type="radio" id="3-stars" name="rating" value="3" v-model="score"/>
+            <label for="3-stars" class="star">★</label>
+            <input type="radio" id="2-stars" name="rating" value="2" v-model="score"/>
+            <label for="2-stars" class="star">★</label>
+            <input type="radio" id="1-star" name="rating" value="1" v-model="score" />
+            <label for="1-star" class="star">★</label>
+          </div>
+          <!-- <input type="number" v-model.trim="score"> -->
+          <!-- <input type="text" v-model.trim="content" @keyup.enter="createReview" class="mx-4"> -->
+          <div class="input-group tm-mb-30 mx-3">
+            <input name="username" type="text" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="한줄평" v-model="content" @keyup.enter="createReview">
+          </div>
+        </div>
+        <div v-for="review in reviewList" v-bind:key="review.id" class="d-flex mx-2">
+          <div class="m-2">{{ review.username }}</div>
+          <div class="m-2">{{ review.score }}</div>
+          <div class="m-2">{{ review.content }}</div>
+          <div class="m-2">{{ review.updated_at }}</div>
+        
         </div>
       </div>
     </div>
   </div>
+
 </template>
+
+
+
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
@@ -151,7 +175,7 @@ export default {
         })
 
     },
-    toDetail : function () {
+    toDetail : function (video) {
       this.$router.push({name: 'MovieDetail', params: {movie:video}})
     }
   },
@@ -162,4 +186,59 @@ export default {
   #back {
     opacity: 0.5;
   }
+  
+  .star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  justify-content: space-around;
+  padding: 0 0.2em;
+  text-align: center;
+  width: 5em;
+}
+ 
+.star-rating input {
+  display: none;
+}
+ 
+.star-rating label {
+  -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color:rgb(170, 169, 169);
+  cursor: pointer;
+}
+ 
+.star-rating :checked ~ label {
+  -webkit-text-fill-color: gold;
+}
+ 
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  -webkit-text-fill-color: #fff58c;
+}
+
+.form-control {
+    font-size: 1.2rem;
+    padding: 5px 0;
+}
+
+.form-control,
+.form-control:focus {
+    color: white;
+    background-color: transparent;
+}
+
+.form-control:focus {
+    border-bottom: 1px solid dark;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.form-control::-webkit-input-placeholder { color: white; }
+.form-control:-moz-placeholder { color: white; }
+.form-control::-moz-placeholder { color: white; }
+.form-control:-ms-input-placeholder { color: white; }
+
 </style>
