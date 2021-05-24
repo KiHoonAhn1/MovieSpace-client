@@ -38,17 +38,64 @@
             <input name="username" type="text" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="한줄평" v-model="content" @keyup.enter="createReview">
           </div>
         </div>
-        <div v-for="review in reviewList" v-bind:key="review.id" class="d-flex mx-2">
+        <!-- 아래 코드 추가함 -->
+        <div class="table-responsive">
+          <b-table 
+          id="my-table"
+          :items="reviewList"
+          :fields="['username', 'content', 'updated_at']"
+          :per-page="perPage"
+          :current-page="currentPage"
+          class="table table-striped custom-table"
+          small
+          >
+          </b-table>
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="rows"
+            :per-page="perPage"
+            aria-controls="my-table"
+            align="center"
+            pills
+            first-number
+            last-number
+            class="my-5 d-flex"
+          >
+          </b-pagination>
+        </div>
+
+        <!-- <div v-for="review in reviewList" v-bind:key="review.id" class="d-flex mx-2">
           <div class="m-2">{{ review.username }}</div>
           <div class="m-2">{{ review.score }}</div>
           <div class="m-2">{{ review.content }}</div>
           <div class="m-2">{{ review.updated_at }}</div>
-        
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
-
+  <!-- <div class="table-responsive">
+    <b-table 
+    id="my-table"
+    :items="items"
+    :fields="['username', 'content', 'updated_at']"
+    :per-page="perPage"
+    :current-page="currentPage"
+    class="table table-striped custom-table"
+    small
+    >
+    </b-table>
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="perPage"
+      aria-controls="my-table"
+      align="center"
+      pills
+      first-number
+      last-number
+    >
+    </b-pagination>
+  </div> -->
 </template>
 
 
@@ -71,6 +118,8 @@ export default {
       reviewList: [],
       content: '',
       score: '',
+      perPage: 10,
+      currentPage: 1,
     }
   },
   // created: function () {
@@ -117,7 +166,12 @@ export default {
     },
     ...mapState ([
       'user',
-    ])
+    ]),
+    computed: {
+      rows() {
+        return this.reviewList.length
+      }
+    },
   },
   methods: {
     setToken: function () {
@@ -137,7 +191,7 @@ export default {
         method: 'get',
         url: `http://127.0.0.1:8000/movies/${this.movie.id}/review/`,
         data: {},
-        headers: this.setToken(),
+        headers: this.setToken()
       })
       .then((res)=> {
         // console.log(res.data)
@@ -240,5 +294,7 @@ export default {
 .form-control:-moz-placeholder { color: white; }
 .form-control::-moz-placeholder { color: white; }
 .form-control:-ms-input-placeholder { color: white; }
+
+
 
 </style>
