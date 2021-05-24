@@ -31,9 +31,6 @@
                 <li>
                   <router-link to="/articleList" class="dropdown-item">게시판</router-link>
                 </li>
-                <li>
-                  <router-link to="/articleList2" class="dropdown-item">게시판2</router-link>
-                </li>
                 <li><hr class="dropdown-divider bg-light"></li>
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
               </ul>
@@ -115,6 +112,7 @@ export default {
     logout: function () {
       this.isLogin = false
       localStorage.removeItem('jwt')
+      this.$store.dispatch('logout')
       this.$router.push({ name: 'Login' })
     }
     /* 이곳에 methods로 검색 기능 넣어줘야 함 */

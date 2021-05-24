@@ -4,7 +4,6 @@ import Home from '@/views/movies/Home.vue'
 import MovieList from '@/views/movies/MovieList.vue'
 import MovieDetail from '@/views/movies/MovieDetail.vue'
 import ArticleList from '@/views/articles/ArticleList.vue'
-import ArticleList2 from '@/views/articles/ArticleList2.vue'
 import Signup from '@/views/accounts/Signup.vue'
 import Login from '@/views/accounts/Login.vue'
 import CreateArticle from '@/views/articles/CreateArticle.vue'
@@ -32,11 +31,6 @@ const routes = [
     path: '/articleList',
     name: 'ArticleList',
     component: ArticleList,
-  },
-  {
-    path: '/articleList2',
-    name: 'ArticleList2',
-    component: ArticleList2,
   },
   {
     path: '/signup',

@@ -19,6 +19,9 @@ export default new Vuex.Store({
     GET_USER: function (state, user) {
       console.log(user)
       state.user = user
+    },
+    LOGOUT: function (state) {
+      state.user = {}
     }
   },
   actions: {
@@ -27,6 +30,9 @@ export default new Vuex.Store({
     },
     getUser: function({commit}, user) {
       commit('GET_USER', user)
+    },
+    logout: function ({commit}) {
+      commit('LOGOUT')
     }
   },
   getters: {
