@@ -21,7 +21,12 @@
       <div>
         <input type="number" v-model.trim="score">
         <input type="text" v-model.trim="content" @keyup.enter="createReview">
-        <p>리뷰 리스트</p>
+        <div v-for="review in reviewList" v-bind:key="review.id">
+          <div>{{ review.username }}</div>
+          <div>{{ review.score }}</div>
+          <div>{{ review.content }}</div>
+          <div>{{ review.updated_at }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -111,14 +116,13 @@ export default {
         headers: this.setToken()
       })
       .then((res)=> {
-        console.log(res.data)
+        // console.log(res.data)
         this.reviewList = res.data
       })
       .catch((err) => {
         console.log(err)
       })
     },
-
     // 아래 코드들이 잘 작동이 안됨..
     createReview: function() {
       const reviewScore = {
@@ -126,9 +130,11 @@ export default {
         score : this.score,
         user: this.user.id,
         movie: this.movie.id,
+        username: this.user.username,
       }
-      console.log(reviewScore)
-      console.log(this.setToken())
+      // console.log(reviewScore)
+      // console.log(this.setToken())
+      // console.log(this.user.username)
       
       axios({
         method: 'post',
