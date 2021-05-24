@@ -1,26 +1,44 @@
 <template>
   <div class="table-responsive">
-    <b-table 
-    id="my-table"
-    :items="items"
-    :fields="['id', 'title', 'user_id', 'created_at']"
+    <table class="table table-striped custom-table" 
+    id="my-table2"
     :per-page="perPage"
     :current-page="currentPage"
-    class="table table-striped custom-table"
-    small
     >
-    </b-table>
+      <thead>
+        <tr>
+          <th scope="col">번호</th>
+          <th scope="col">제목</th>
+          <th scope="col">작성자</th>
+          <th scope="col">
+            작성 시간
+            <small class="d-block text-secondary">수정된 시간</small>
+            </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr scope="row" v-for="(item, idx) in items" :key="idx">
+          <td>
+            {{ item.id }}
+          </td>
+          <td><a href="#">{{ item.title }}</a></td>
+          <td>{{ item.user_id }}</td>
+          <td>
+            {{ item.created_at }}
+            <small class="d-block">{{ item.updated_at }} </small>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <b-pagination
+      id="page"
       v-model="currentPage"
       :total-rows="rows"
       :per-page="perPage"
-      aria-controls="my-table"
+      aria-controls="my-table2"
       align="center"
-      pills
-      first-number
-      last-number
-    >
-    </b-pagination>
+      style=""
+    ></b-pagination>
   </div>
 </template>
 
@@ -31,7 +49,7 @@ export default {
   name: 'Articles',
   data: function () {
     return {
-      perPage: 10,
+      perPage: 3,
       currentPage: 1,
       items: []
     }
@@ -39,14 +57,14 @@ export default {
   computed: {
     rows() {
       return this.items.length
-    }
+    },
   },
   created: function () {
     axios.get('http://127.0.0.1:8000/community')
       .then(res => {
         this.items = res.data
       })
-  },
+  }
 }
 </script>
 

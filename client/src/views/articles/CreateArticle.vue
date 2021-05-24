@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>Create Article Form</div>
 </template>
 
 <script>

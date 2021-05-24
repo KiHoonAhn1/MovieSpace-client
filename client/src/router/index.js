@@ -7,6 +7,7 @@ import ArticleList from '@/views/articles/ArticleList.vue'
 import ArticleList2 from '@/views/articles/ArticleList2.vue'
 import Signup from '@/views/accounts/Signup.vue'
 import Login from '@/views/accounts/Login.vue'
+import CreateArticle from '@/views/articles/CreateArticle.vue'
 
 Vue.use(VueRouter)
 
@@ -46,6 +47,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/createarticle',
+    name: 'CreateArticle',
+    component: CreateArticle,
   },
 
 ]

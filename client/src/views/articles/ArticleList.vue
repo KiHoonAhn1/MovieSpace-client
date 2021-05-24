@@ -1,70 +1,25 @@
 <template>
   <div class="article-content">
     <div class="container">
-      <div class="table-responsive">
-        <table class="table table-striped custom-table">
-          <thead>
-            <tr>
-              <th>gd</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>gd</td>
-            </tr>
-          </tbody>
-        </table>
-        <!-- <table class="table table-striped custom-table">
-        </table> -->
-        <b-table 
-          id="my-table"
-          :items="items"
-          :fields="['id', 'title', 'user_id', 'created_at']"
-          :per-page="perPage"
-          :current-page="currentPage"
-          class="table table-striped custom-table"
-          small>
-        </b-table>
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="rows"
-          :per-page="perPage"
-          aria-controls="my-table"
-          align="center"
-        >
-        </b-pagination>
-      </div>
+      <button>
+        <router-link to="/createarticle">
+          글 작성
+        </router-link>
+      </button>
+      <Articles />
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import Articles from '@/components/articles/Articles.vue'
 
 // const URL = 'http://127.0.0.1:8000/community/'
 
 export default {
   name: 'ArticleList',
-  data: function () {
-    return {
-      perPage: 10,
-      currentPage: 1,
-      items: []
-    }
-  },
-  computed: {
-    rows() {
-      return this.items.length
-    }
-  },
-  created: function () {
-    axios.get('http://127.0.0.1:8000/community')
-      .then(res => {
-        this.items = res.data
-      })
-  },
-  mounted: function () {
-    
+  components: {
+    Articles,
   },
 }
 </script>

@@ -44,7 +44,7 @@ export default {
       score: '',
     }
   },
-  created: function () {
+  // created: function () {
     /* 배경을 영화 backdrop_path로 바꾸기 진행중 */
     // const video = document.querySelector('#bg-video')
     // video.setAttribute('style', 'display:none;')
@@ -52,7 +52,7 @@ export default {
     // const bg = document.createElement('div')
     // body.append(bg)
     // bg.setAttribute('url', this.movie.backdrop_path)
-  },
+  // },
   // 추가함
   created: async function () {
 
@@ -107,10 +107,15 @@ export default {
       axios({
         method: 'get',
         url: `http://127.0.0.1:8000/movies/${this.movie.id}/review/`,
+        data: '',
+        headers: this.setToken()
       })
       .then((res)=> {
         console.log(res.data)
         this.reviewList = res.data
+      })
+      .catch((err) => {
+        console.log(err)
       })
     },
 
@@ -122,7 +127,9 @@ export default {
         user: this.user.id,
         movie: this.movie.id,
       }
-      // console.log(reviewScore)
+      console.log(reviewScore)
+      console.log(this.setToken())
+      
       axios({
         method: 'post',
         url: `http://127.0.0.1:8000/movies/${this.movie.id}/review/`,
