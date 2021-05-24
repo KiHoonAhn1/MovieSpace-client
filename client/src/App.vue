@@ -175,7 +175,6 @@ export default {
 /*  */
 /* 여기부터 Search Box 관련 CSS */
 /*  */
-/* 왜 감싸는 content에 주면 작동하고 input 본인에게 직접 주면 상속된 속성에 먹히는지 질문 */
 /* 나중에 absolute 위치와 글씨 크기를 조정해서 레이아웃을 깔끔하게 만들어야 한다. */
   #search-content {
     text-align: start;

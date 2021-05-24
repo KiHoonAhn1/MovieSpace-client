@@ -1,44 +1,46 @@
 <template>
   <div class="container">
     <h3 class="major">Form</h3>
-    <form method="post" action="#">
-      <div class="field">
-        <label for="demo-name" class="text-start fs-3 my-2">Title</label>
-        <input type="text" name="demo-name" id="demo-name" value="" placeholder="제목을 입력해주세요" class="mb-5" v-model.trim="article.title" />
+    <div class="field">
+      <label for="demo-name" class="text-start fs-3 my-2">Title</label>
+      <input type="text" name="demo-name" id="demo-name" value="" placeholder="제목을 입력해주세요" class="mb-5" v-model.trim="title" />
+    </div>
+    <div class="field">
+      <label for="demo-message" class="text-start fs-3 my-2">Content</label>
+      <textarea name="demo-message" id="demo-message" placeholder="내용을 입력해주세요." rows="8" class="mb-5" v-model.trim="content"></textarea>
+    </div>
+    <div class="fields">
+      <div class="field third">
+        <label for="demo-hashtag" class="text-start fs-4 my-2">HashTag</label>
+        <input type="text" name="demo-hashtag" id="demo-hashtag" :value="user.id" placeholder="해시태그" />
       </div>
-      <div class="field">
-        <label for="demo-message" class="text-start fs-3 my-2">Content</label>
-        <textarea name="demo-message" id="demo-message" placeholder="내용을 입력해주세요." rows="8" class="mb-5" v-model.trim="article.content"></textarea>
-      </div>
-      <div class="fields">
-        <div class="field third">
-          <label for="demo-hashtag" class="text-start fs-4 my-2">HashTag</label>
-          <input type="text" name="demo-hashtag" id="demo-hashtag" value="" placeholder="해시태그" />
-        </div>
-      </div>
-      <ul class="actions button-ul">
-        <li><input type="submit" value="작성" class="primary color2 buttons" @submit="createArticle" /></li>
-        <li><router-link to="articleList"><input type="reset" value="취소" class="buttons" /></router-link></li>
-      </ul>
-    </form>
+    </div>
+    <ul class="actions button-ul">
+      <li><input type="submit" value="작성" class="primary color2 buttons" @click="createArticle" /></li>
+      <li><router-link to="articleList"><input type="reset" value="취소" class="buttons" /></router-link></li>
+    </ul>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { mapState } from 'vuex'
 
 export default {
   name: 'ArticleForm',
+	computed: {
+		...mapState ([
+      'user',
+    ])
+	},
   data: function () {
     return {
-      article: {
-        title: '',
-        content: '',
-      }
+			title: '',
+			content: '',
     }
   },
   methods: {
-    setToken: function () {
+		setToken: function () {
       const token = localStorage.getItem('jwt')
       const config = {
         Authorization: `JWT ${token}`
@@ -46,12 +48,25 @@ export default {
       return config
     },
     createArticle: function () {
+			const articleinfo = {
+				title: this.title,
+				content: this.content,
+				user: this.user.id,
+			}
       axios ({
         method: 'post',
-
+        url: 'http://127.0.0.1:8000/community/',
+        data: articleinfo,
       })
+        .then((res) => {
+          console.log(res)
+          this.$router.push({ name: 'articleList' })
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
-  }
+  },
 }
 </script>
 

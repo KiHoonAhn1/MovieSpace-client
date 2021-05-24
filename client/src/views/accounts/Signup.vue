@@ -56,8 +56,7 @@ export default {
           console.log(err)
           alert('정보를 모두 입력해주세요.')
         })
-      // signup 후 login 진행
-      // 2번에 걸쳐서 따로 하는 것 말고 더 좋은 방법이 있으면 수정
+        /* jwt obtain 회원가입, 로그인 함께 처리하는 방법 고려 */
       await axios({
         method: 'post',
         url: 'http://127.0.0.1:8000/accounts/api-token-auth/',
