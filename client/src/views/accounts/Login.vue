@@ -34,6 +34,13 @@ export default {
     }
   },
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
     login: async function () {
       await axios({
         method: 'post',
@@ -50,7 +57,12 @@ export default {
           console.log(err)
         })
       const decode = jwt.verify(this.token, secretkey)
-      await axios.get(`http://127.0.0.1:8000/accounts/${decode.username}`)
+      await axios({
+        method: 'get',
+        url: `http://127.0.0.1:8000/accounts/${decode.username}`,
+        data: {},
+        headers: this.setToken()
+        })
         .then(res => {
           this.$store.dispatch('getUser', res.data)
         })
