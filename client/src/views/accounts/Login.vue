@@ -18,6 +18,9 @@
 
 <script>
 import axios from 'axios'
+import jwt from 'jsonwebtoken'
+
+const secretkey = 'django-insecure-y%n75jhzgb2h#p_rdwc&f6435(=fu7xg%4jmbosw7_hpwrt!h*'
 
 export default {
   name: "Login",
@@ -41,19 +44,30 @@ export default {
           localStorage.setItem('jwt', res.data.token)
           this.$emit('login')
           this.$router.push({ name: 'Home' })
+          return res.data.token
+        })
+        .then(res => {
+          const decode = jwt.verify(res, secretkey)
+          axios.get(`http://127.0.0.1:8000/accounts/${decode.username}`)
+            .then(res => {
+              this.$store.dispatch('getUser', res.data)
+            })
+            .catch(err => {
+              console.log(err)
+            })
         })
         .catch(err => {
           console.log(err)
         })
       // user 프로필을 받아서 state에 담아주자
-      axios.get(`http://127.0.0.1:8000/accounts/${this.credentials.username}`)
-        .then(res => {
-          this.$store.dispatch('getUser', res.data)
-          console.log(res)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      // axios.get(`http://127.0.0.1:8000/accounts/${this.credentials.username}`)
+      //   .then(res => {
+      //     this.$store.dispatch('getUser', res.data)
+      //     console.log(res)
+      //   })
+      //   .catch(err => {
+      //     console.log(err)
+      //   })
     }
   }
 }
