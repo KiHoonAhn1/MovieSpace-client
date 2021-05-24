@@ -3,11 +3,13 @@
     <b-table 
     id="my-table"
     :items="items"
-    :fields="['id', 'title', 'user_id', 'created_at']"
+    :fields="['id', 'title', 'username', 'created_at']"
     :per-page="perPage"
     :current-page="currentPage"
     class="table table-striped custom-table"
+    @row-clicked="clickArticle"
     small
+    style="cursor:pointer;"
     >
     </b-table>
     <b-pagination
@@ -19,6 +21,7 @@
       pills
       first-number
       last-number
+      class="my-5 d-flex"
     >
     </b-pagination>
   </div>
@@ -26,6 +29,7 @@
 
 <script scoped>
 import axios from 'axios'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Articles',
@@ -33,7 +37,7 @@ export default {
     return {
       perPage: 10,
       currentPage: 1,
-      items: []
+      items: [],
     }
   },
   methods: {
@@ -44,6 +48,10 @@ export default {
       }
       return config
     },
+    clickArticle: function (article) {
+      this.$store.dispatch('getArticle', article)
+      this.$router.push({ name: 'ArticleDetail' })
+    }
   },
   mounted: function () {
     axios({
@@ -53,8 +61,13 @@ export default {
       headers: this.setToken(),
       })
         .then(res => {
-          this.items = res.data
+          this.$store.dispatch('getArticles', res.data)
+          return res
       })
+        .then(res => {
+          console.log(res)
+          this.items = this.articles
+        })
         .catch(err => {
           console.log(err)
         })
@@ -62,7 +75,10 @@ export default {
   computed: {
     rows() {
       return this.items.length
-    }
+    },
+    ...mapState ([
+      'articles',
+    ])
   },
 }
 </script>

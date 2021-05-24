@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h3 class="major">게시물 작성</h3>
+    <h3 class="major">Form</h3>
     <div class="field">
       <label for="demo-title" class="text-start fs-3 my-2">Title</label>
       <input type="text" name="demo-title" id="demo-title" value="" placeholder="제목을 입력해주세요" class="mb-5" v-model.trim="title" />
@@ -66,6 +66,7 @@ export default {
 	computed: {
 		...mapState([
 			'user',
+      'article',
 		])
 	}
 }

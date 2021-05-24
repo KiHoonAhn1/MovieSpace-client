@@ -1,11 +1,13 @@
 <template>
   <div class="article-content">
     <div class="container">
-      <button>
-        <router-link to="/createarticle">
-          글 작성
-        </router-link>
-      </button>
+      <div class="text-end" style="background:transparent;padding-right:7rem;padding-bottom:3rem;">
+          <button class="text" style="background:transparent; box-shadow: 5px 5px 5px ivory;">
+            <router-link to="/createarticle" class="text-white">
+              글 작성
+            </router-link>
+        </button>
+      </div>
       <Articles />
     </div>
   </div>

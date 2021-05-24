@@ -88,7 +88,6 @@ export default {
   created: function () {
     axios.get(URL)
       .then(response => {
-        console.log(response.data)
         this.$store.dispatch('getMovies', response.data)
       })
     // token이 있으면 로그인 처리
