@@ -6,14 +6,24 @@
       <div class="p-4 d-flex flex-column mt-3 col-8">
         <div class="d-inline-flex justify-content-between ms-2">
           <h1><strong>{{ movie.title }}</strong></h1>
-          <div class="d-flex flex-column justify-content-center me-3"><i class="far fa-heart fa-2x" style="color:crimson;" size="lg"></i></div>
+          <div class="d-flex flex-column justify-content-center me-3">
+            <!-- 좋아요기능 -->
+            <div v-if="liked === true">
+              <i class="fas fa-heart fa-3x" style="color:crimson; cursor:pointer;" size="lg" @click="likeMovie"></i>
+            </div>
+            <div v-else>
+              <i class="far fa-heart fa-3x" style="color:crimson; cursor:pointer;" size="lg" @click="likeMovie"></i>
+            </div>
+            
+            
+          </div>
         </div>
         <!-- width="640" height="360" -->
         <iframe id="player" type="text/html" :src="youtubeVideoSrc" frameborder="0" class="mt-4 w-100 h-100"></iframe>
       </div>
-      <div class="p-4 mt-4 col-4">
+      <div class="p-4 mt-5 col-4">
         <h4>비슷한 영화 추천</h4>
-        <div class="mt-4 ms-4">
+        <div class="mt-4 ms-2">
           <SimilarMovie
           v-for= "(video, idx) in similarVideo"
           :key="idx"
@@ -22,7 +32,12 @@
           />
         </div>
         <div class="mt-5">
-          <h4>영화 정보</h4>
+          <!-- <h4>영화 정보</h4> -->
+          <div class="d-flex">
+            <i class="fas fa-heart fa-lg" style="color:crimson; cursor:pointer;"></i>
+            <div class="ms-3">{{ likedCount }}명이 이 영화를 좋아합니다.</div>
+          </div>
+          
           <div class="d-flex justify-content-between mt-4" >
             <p style="color:white;">발매일 {{ movie.release_date }}</p>
             <p style="color:white;">평점 {{ movie.vote_average }}</p>
@@ -55,8 +70,6 @@
             <input type="radio" id="1-star" name="rating" value="1" v-model="score" />
             <label for="1-star" class="star">★</label>
           </div>
-          <!-- <input type="number" v-model.trim="score"> -->
-          <!-- <input type="text" v-model.trim="content" @keyup.enter="createReview" class="mx-4"> -->
           <div class="input-group tm-mb-30 mx-4">
             <input name="username" type="text" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="한줄평" v-model="content" @keyup.enter="createReview">
           </div>
@@ -87,20 +100,10 @@
           </b-pagination>
         </div>
 
-        <!-- <div v-for="review in reviewList" v-bind:key="review.id" class="d-flex mx-2">
-          <div class="m-2">{{ review.username }}</div>
-          <div class="m-2">{{ review.score }}</div>
-          <div class="m-2">{{ review.content }}</div>
-          <div class="m-2">{{ review.updated_at }}</div>
-        </div> -->
       </div>
     </div>
   </div>
 </template>
-
-
-
-
 
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -123,6 +126,10 @@ export default {
       perPage: 10,
       currentPage: 1,
       genreList: [],
+      // 좋아요 땜에 일단 추가
+      liked: '',
+      likeusers: '',
+      likedCount: '',
     }
   },
   components: {
@@ -162,13 +169,45 @@ export default {
         i ++
       }
     })
+
+    // const likeuserInfo = {
+    //   user: this.user.id,
+    // }
+    // axios({
+    //   method: 'post',
+    //   url: `http://127.0.0.1:8000/movies/${this.movie.id}/movie_like/`,
+    //   data: likeuserInfo,
+    //   headers: this.setToken()
+    // })
+    // .then((res)=> {
+    //   // console.log(res.data)
+    //   // data: {liked: true, count: 1, movie: {},} 일단 이렇게 들어옴
+    //   console.log(res)
+    //   this.liked = res.data.liked
+    //   this.likedCount = res.data.count
+    //   this.likeusers = res.data.movie.like_users
+    //   // this. = res.data.users
+    //   // console.log(this.liked)
+    //   // console.log(this.likedCount)
+    //   // console.log(this.movie)
+    // })
+
+
+
     this.getGenres()
     this.getReviews()
-    this.getGenres()
+    this.likeMovie()
   },
   created: function() {
     this.movieData = this.movie
+
+    // this.likeMovie()
+
+    
+
+
     // console.log(this.genres)
+    // console.log(this.movie)
   },
   computed: {
     youtubeVideoSrc: function () {
@@ -182,17 +221,6 @@ export default {
     rows() {
       return this.reviewList.length
     },
-    
-
-    // filterByGenre : function (name) {
-    //   this.genreList.filter(function(ge) {
-    //     if (ge.id === name) {
-    //       console.log(ge.name)
-    //       return ge.name
-          
-    //     }
-    //   })
-    // }
   },
   methods: {
     setToken: function () {
@@ -202,11 +230,6 @@ export default {
       }
       return config
     },
-    // // similar movie 이미지 포스터 가져오기
-    // getImage: function (url) {
-    //   return 'https://image.tmdb.org/t/p/original'+ url
-    // },
-    // movie review list 불러오기
     getReviews: function () {
       axios({
         method: 'get',
@@ -215,7 +238,6 @@ export default {
         headers: this.setToken()
       })
       .then((res)=> {
-        // console.log(res.data)
         this.reviewList = res.data
       })
       .catch((err) => {
@@ -224,11 +246,10 @@ export default {
     },
     getGenres: function () {
       this.genreList = this.genres.filter((genre) => {
-        // console.log(genre)
         return this.movie.genres.includes(genre.id)
       })
     },
-    // 아래 코드들이 잘 작동이 안됨..
+    // 영화의 리뷰 생성 기능
     createReview: function() {
       const reviewScore = {
         content : this.content,
@@ -237,10 +258,6 @@ export default {
         movie: this.movie.id,
         username: this.user.username,
       }
-      // console.log(reviewScore)
-      // console.log(this.setToken())
-      // console.log(this.user.username)
-      
       axios({
         method: 'post',
         url: `http://127.0.0.1:8000/movies/${this.movie.id}/review/`,
@@ -248,21 +265,47 @@ export default {
         headers: this.setToken()
       })
         .then((res)=> {
-          console.log(res)
+          // console.log(res)
           this.getReviews()
         })
         .catch(err => {
           console.log(err)
         })
-
     },
+    // similar movie의 detail 이동 기능
     toDetail : function (video) {
       this.$store.dispatch('getMovie', video)
       this.$router.go(this.$router.currentPage)
-      
-      // console.log(this.reviewList)
-      // console.log(rows)
     },
+    // 영화 좋아요 기능
+    likeMovie: function () {
+      const likeuserInfo = {
+        user: this.user.id,
+      }
+      axios({
+        method: 'post',
+        url: `http://127.0.0.1:8000/movies/${this.movie.id}/movie_like/`,
+        data: likeuserInfo,
+        headers: this.setToken()
+      })
+      .then((res)=> {
+        // console.log(res.data)
+        // data: {liked: true, count: 1, movie: {},} 일단 이렇게 들어옴
+        // console.log(res)
+        // console.log(this.liked)
+        this.liked = res.data.liked
+        this.likedCount = res.data.count
+        this.likeusers = res.data.movie.like_users
+        // this. = res.data.users
+        console.log(this.liked)
+        console.log(this.likedCount)
+        console.log(this.likeusers)
+        // console.log(this.movie)
+      })
+      .catch((error) =>{
+        console.log(error)
+      })
+    }
   },
 }
 </script>
