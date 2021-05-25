@@ -46,7 +46,9 @@
               <img class="me-2" src="@/assets/img.jpg" style="width:40px; height:40px; border-radius:20px;"> {{ user.username }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end bg-dark mt-4" style="font-size:20px;" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">내 정보</a></li>
+              <li>
+                <router-link to="/profile" class="dropdown-item">내 정보</router-link>
+              </li>
               <li><a class="dropdown-item" href="#">플레이리스트</a></li>
               <li><hr class="dropdown-divider bg-light"></li>
               <li>

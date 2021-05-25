@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h3 class="major">Form</h3>
+    <h3 class="major">Update Form</h3>
     <div class="field">
       <label for="demo-title" class="text-start fs-3 my-2">Title</label>
       <input type="text" name="demo-title" id="demo-title" value="" placeholder="제목을 입력해주세요" class="mb-5" v-model.trim="title" />
@@ -16,7 +16,7 @@
       </div>
     </div>
     <ul class="actions button-ul">
-      <li><input type="button" value="작성" class="primary color2 buttons" @click="createArticle" /></li>
+      <li><input type="button" value="수정" class="primary color2 buttons" @click="updateArticle" /></li>
       <li><router-link to="articleList"><input type="reset" value="취소" class="buttons" /></router-link></li>
     </ul>
   </div>
@@ -42,22 +42,25 @@ export default {
       }
       return config
     },
-    createArticle: async function () {
+    updateArticle: async function () {
 			const articleinfo = {
 				title: this.title,
 				content: this.content,
 				username: this.user.username,
 			}
       await axios ({
-        method: 'post',
-        url: 'http://127.0.0.1:8000/community/',
+        method: 'put',
+        url: `http://127.0.0.1:8000/community/${this.article.id}/`,
         data: articleinfo,
 				headers: this.setToken()
       })
         .then((res) => {
-          console.log(res)
-          this.$router.push({ name: 'ArticleList' })
+					this.$store.dispatch('getArticle', res.data)
         })
+				.then(res => {
+          this.$router.push({ name: 'ArticleDetail' })
+					console.log(res)
+				})
         .catch((err) => {
           console.log(err)
         })
@@ -68,6 +71,10 @@ export default {
 			'user',
       'article',
 		])
+	},
+	mounted: function () {
+		this.title = this.article.title
+		this.content = this.article.content
 	}
 }
 </script>
