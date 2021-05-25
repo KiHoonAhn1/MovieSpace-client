@@ -8,7 +8,7 @@
           <h1><strong>{{ movie.title }}</strong></h1>
           <div class="d-flex flex-column justify-content-center me-3">
             <!-- 좋아요기능 -->
-            <div v-if="liked === true">
+            <div v-if="liked === user.id">
               <i class="fas fa-heart fa-3x" style="color:crimson; cursor:pointer;" size="lg" @click="likeMovie"></i>
             </div>
             <div v-else>
@@ -45,7 +45,7 @@
           <div>
             <p class="textlength" style="color:white;">{{ movie.overview }}</p>
           </div>
-          <div class="d-flex">
+          <div class="d-flex ms-2">
             <div v-for="(genre,idx) in genreList" :key="idx" class="me-4">
               #{{ genre.name }}
             </div>
@@ -71,7 +71,7 @@
             <label for="1-star" class="star">★</label>
           </div>
           <div class="input-group tm-mb-30 mx-4">
-            <input name="username" type="text" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="한줄평" v-model="content" @keyup.enter="createReview">
+            <input name="username" type="text" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="리뷰를 남겨주세요" v-model="content" @keyup.enter="createReview" autofocus>
           </div>
         </div>
         <!-- 아래 코드 추가함 -->
@@ -170,44 +170,14 @@ export default {
       }
     })
 
-    // const likeuserInfo = {
-    //   user: this.user.id,
-    // }
-    // axios({
-    //   method: 'post',
-    //   url: `http://127.0.0.1:8000/movies/${this.movie.id}/movie_like/`,
-    //   data: likeuserInfo,
-    //   headers: this.setToken()
-    // })
-    // .then((res)=> {
-    //   // console.log(res.data)
-    //   // data: {liked: true, count: 1, movie: {},} 일단 이렇게 들어옴
-    //   console.log(res)
-    //   this.liked = res.data.liked
-    //   this.likedCount = res.data.count
-    //   this.likeusers = res.data.movie.like_users
-    //   // this. = res.data.users
-    //   // console.log(this.liked)
-    //   // console.log(this.likedCount)
-    //   // console.log(this.movie)
-    // })
-
-
-
     this.getGenres()
     this.getReviews()
-    this.likeMovie()
+    this.like()
+    // this.likeMovie()
+    
   },
   created: function() {
     this.movieData = this.movie
-
-    // this.likeMovie()
-
-    
-
-
-    // console.log(this.genres)
-    // console.log(this.movie)
   },
   computed: {
     youtubeVideoSrc: function () {
@@ -278,6 +248,28 @@ export default {
       this.$router.go(this.$router.currentPage)
     },
     // 영화 좋아요 기능
+    like: function () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8000/movies/${this.movie.id}/like/`,
+        headers: this.setToken()
+      })
+      .then((res)=> {
+        // console.log(res.data)
+        this.likedCount = res.data.count
+        this.likeUsers = res.data.movie.like_users
+        console.log(this.likeUsers)
+        this.liked = this.likeUsers.find((users) => {
+          return users === this.user.id
+        })
+        if (this.liked === undefined) {
+          this.liked = false
+        }
+      })
+      .catch((error) =>{
+        console.log(error)
+      })
+    },
     likeMovie: function () {
       const likeuserInfo = {
         user: this.user.id,
@@ -289,18 +281,8 @@ export default {
         headers: this.setToken()
       })
       .then((res)=> {
-        // console.log(res.data)
-        // data: {liked: true, count: 1, movie: {},} 일단 이렇게 들어옴
-        // console.log(res)
-        // console.log(this.liked)
         this.liked = res.data.liked
-        this.likedCount = res.data.count
-        this.likeusers = res.data.movie.like_users
-        // this. = res.data.users
-        console.log(this.liked)
-        console.log(this.likedCount)
-        console.log(this.likeusers)
-        // console.log(this.movie)
+        this.like()
       })
       .catch((error) =>{
         console.log(error)
