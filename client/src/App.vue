@@ -69,7 +69,7 @@
         </div>
       </div>
     </div>
-    <router-view @login="isLogin = true" />
+    <router-view @login="isLogin = true" :key="$route.fullPath" />
   </div>
 </template>
 <script>
@@ -97,6 +97,15 @@ export default {
     if (token) {
       this.isLogin = true
     }
+    axios({
+      method: 'get',
+      url: 'http://127.0.0.1:8000/movies/genres/',
+      data: {},
+      headers: this.setToken()
+    })
+    .then((res)=> {
+      this.$store.dispatch('getGenres', res.data)
+    })
   },
   /* DOM이 모두 구성된 후에 인식할 수 있으므로 mounted 사용 */
   mounted: function () {
@@ -110,6 +119,13 @@ export default {
     searchBtn.addEventListener("click", expand);
   },
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
     logout: function () {
       this.isLogin = false
       localStorage.removeItem('jwt')
