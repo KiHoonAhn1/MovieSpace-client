@@ -10,21 +10,23 @@ export default new Vuex.Store({
   ],
   state: {
     movies: [],
-    // movie: {},
+    movie: {},
     user: {},
     articles: [],
     article: {},
     comments: [],
+    genres: [],
   },
   mutations: {
     GET_MOVIES: function (state, movies) {
       state.movies = movies
     },
-    // GET_MOVIE: function (state, movie) {
-    //   // console.log(movie)
-    //   state.movie = movie
-
-    // },
+    GET_MOVIE: function (state, movie) {
+      state.movie = movie
+    },
+    GET_GENRES: function (state, genres) {
+      state.genres = genres
+    },
     GET_USER: function (state, user) {
       state.user = user
     },
@@ -45,11 +47,13 @@ export default new Vuex.Store({
     getMovies: function({commit}, movies) {
       commit('GET_MOVIES', movies)
     },
-    // getMovie: function({commit}, movie) {
-    //   // console.log(movie)
-    //   commit('GET_MOVIE', movie)
-
-    // },
+    getMovie: function({commit}, movie) {
+      commit('GET_MOVIE', movie)
+    },
+    getGenres: function({commit}, genres) {
+      // console.log(genres)
+      commit('GET_GENRES', genres)
+    },
     getUser: function({commit}, user) {
       commit('GET_USER', user)
     },
