@@ -55,7 +55,7 @@
 
 <script>
 export default {
-  name: 'ProfileUpdate'
+  name: 'MyUpdate'
 }
 </script>
 

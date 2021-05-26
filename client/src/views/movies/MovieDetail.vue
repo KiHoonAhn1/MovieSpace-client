@@ -1,6 +1,6 @@
 <template>
   <div class="text-white container bg-dark">
-    
+    <span onclick="history.back()" class="close" title="Close PopUp"></span>
     <div class="d-flex m-3 row">
       
       <div class="p-4 d-flex flex-column mt-3 col-8">
@@ -154,6 +154,7 @@ export default {
 
     axios.get(VIDEO_URL)
     .then(response => {
+      console.log(response)
       this.movieVideo = response.data.results[0].key
     })
 
@@ -361,6 +362,18 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.close {
+    position: static;
+    right: 25px;
+    top: 0;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+}
+.close:hover,.close:focus {
+    color: red;
+    cursor: pointer;
 }
 
 </style>
