@@ -10,7 +10,7 @@
       <div class="container-fluid">
         <router-link to="/" class="nav-link">
           <a class="navbar-brand" style="font-size:30px;" href="#">
-            <img src="@/assets/rocket.jpg" alt="" style="width:30px; border-radius:15px;">
+            <img src="@/assets/rocket.jpg" alt="" style="width:30px; border-radius:15px;" class="me-1">
             Movie Space
           </a>
         </router-link>
