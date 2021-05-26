@@ -2,50 +2,37 @@
   <div>
     <div id="contact">
       <section class="clearfix">
-        <div class="g1">
-          <div class="sny-icon-box">
-            <div class="sny-icon">
-              <i class="icon-globe"></i>
-            </div>
-            <div class="sny-icon-content">
-              <h4>
-                Address
-              </h4>
-              <p>
-                Type here
-              </p>
-            </div>
+        <div class="g1 mt-4 text-start">
+          <div class="photo">
+            <img src="@/assets/img.jpg" alt="" class="">
           </div>
+          <div class="text-center">
+            <button>이미지 변경</button>
+          </div>
+          ㅎㅇㅎㅇ
+          <br>
+          
+        </div>
+        <div class="g2 text-start mt-4">
+            <div class="container">
+              <label for="my_id" class="ms-4 mb-0 fs-4 fw-bold">ID</label>
+              <input type="text" placeholder="아이디를 입력해주세요" name="my_id" class="mb-3" v-model="credentials.username" readonly>
+              <label for="my_pwd" class="ms-4 mb-0 fs-4 fw-bold">PASSWORD</label>
+              <input type="text" placeholder="비밀번호를 입력해주세요" name="my_pwd" class="mb-3" v-model="credentials.password">
+              <label for="my_name" class="ms-4 mb-0 fs-4 fw-bold">NAME</label>
+              <input type="text" placeholder="이름을 입력해주세요" name="my_name" class="mb-3" v-model="credentials.last_name">
+              <label for="my_email" class="ms-4 mb-0 fs-4 fw-bold">EMAIL</label>
+              <input type="text" placeholder="이메일 혹은 github 주소를 입력해주세요" name="my_email" class="mb-3" v-model="credentials.email">
+              <label for="my_email" class="ms-4 mb-0 fs-4 fw-bold">INTRODUCTION</label>
+              <textarea class="project_description mb-3" rows="3" placeholder="인사말을 입력해주세요" v-model="credentials.introduction"></textarea>
+              <label for="my_email" class="ms-4 mb-0 fs-4 fw-bold">BIRTH</label>
+              <b-form-datepicker id="example-datepicker" style="width:85%" v-model="credentials.birth" class="ms-4 mb-2" ></b-form-datepicker>
+              <button class="project_submit" type="submit">Submit</button>
+              <button class="project_submit project_cancel" type="submit" @click="goPage4">Cancel</button>
+            </div>
         </div>
         <div class="g1">
-          <div class="sny-icon-box">
-            <div class="sny-icon">
-              <i class="icon-phone"></i>
-            </div>
-            <div class="sny-icon-content">
-              <h4>
-                E-mail
-              </h4>
-              <p>
-                Add your mail 1<br />Add your mail 2
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="g1">
-          <div class="sny-icon-box">
-            <div class="sny-icon">
-              <i class="icon-user"></i>
-            </div>
-            <div class="sny-icon-content">
-              <h4>
-                About Me
-              </h4>
-              <p>
-                Write something about you
-              </p>
-            </div>
-          </div>
+          hi
         </div>
         <div class="break"></div>
       </section>
@@ -54,8 +41,32 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  name: 'MyUpdate'
+  name: 'MyUpdate',
+  data: function () {
+    return {
+      credentials: {
+        image: '@/assets/img.jpg',
+        id: '',
+        password: '',
+        name: '',
+        email: '',
+        introduction: '',
+        birth: '',
+      }
+    }
+  },
+  methods: {
+    goPage4: function () {
+      this.$emit('goPage4')
+    },
+  },
+  computed: {
+    ...mapState([
+      'user'
+    ])
+  }
 }
 </script>
 
@@ -959,6 +970,16 @@ input[type=text], .project_description, input[type=url] {
 /* Set a style for all buttons */
 .project_submit {
   background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 5px 26px;
+  border: none;
+  cursor: pointer;
+  width: 85%;
+  font-size:20px;
+}
+.project_cancel {
+  background-color: red;
   color: white;
   padding: 14px 20px;
   margin: 5px 26px;

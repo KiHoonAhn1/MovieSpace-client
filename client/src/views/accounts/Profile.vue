@@ -22,7 +22,7 @@
             </span>
           </li>
 
-          <li class='tab' id="page4" @click="page4">
+          <li class='tab' id="page4" @click="page4" v-if="user.username === anotherUser.username">
             <span>
               정보 수정
             </span>
@@ -35,7 +35,7 @@
         <div id="tab-data-wrap">
           <!-- About Tab Data -->
           <div v-if="this.page===1">
-            <AboutMe @getPage3="getPage3"/>
+            <AboutMe @goPage3="goPage3"/>
           </div>
           <!-- End About Tab Data -->
           <!-- ----------------------------------------------------------------------------------- -->
@@ -53,11 +53,11 @@
           <!-- ----------------------------------------------------------------------------------- -->
           <!-- Contact Tab Data -->
           <div v-else-if="this.page===4">
-            <MyPage />
+            <MyPage @goPage5="goPage5"/>
           </div>
 
           <div v-else-if="this.page===5">
-            <MyUpdate />
+            <MyUpdate @goPage4="goPage4"/>
           </div>
           <!-- End Contact Data -->
           <!-- ----------------------------------------------------------------------------------- -->
@@ -73,6 +73,7 @@ import Playlists from '@/components/accounts/Playlists.vue'
 import Posts from '@/components/accounts/Posts.vue'
 import MyPage from '@/components/accounts/MyPage.vue'
 import MyUpdate from '@/components/accounts/MyUpdate.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Profile',
@@ -91,53 +92,71 @@ export default {
   mounted: function () {
     this.page1()
   },
+  computed: {
+    ...mapState([
+      'user',
+      'anotherUser'
+    ])
+  },
   methods: {
-    getPage3: function () {
+    goPage3: function () {
       this.page3()
+    },
+    goPage4: function () {
+      this.page = 4
+    },
+    goPage5: function () {
+      this.page = 5
     },
     page1: function () {
       const tab1 = document.querySelector('#page1')
       const tab2 = document.querySelector('#page2')
       const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
+      if (this.user.username === this.anotherUser.username) {
+        const tab4 = document.querySelector('#page4')
+        tab4.setAttribute('class', 'tab')
+        tab4.firstChild.setAttribute('class', '')
+      }
       tab1.setAttribute('class', 'tab pt-3 px-3')
       tab2.setAttribute('class', 'tab')
       tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab')
       tab1.firstChild.setAttribute('class', 'text-success')
       tab2.firstChild.setAttribute('class', '')
       tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', '')
       this.page = 1
     },
     page2: function () {
       const tab1 = document.querySelector('#page1')
       const tab2 = document.querySelector('#page2')
       const tab3 = document.querySelector('#page3')
+      if (this.user.username === this.anotherUser.username) {      
       const tab4 = document.querySelector('#page4')
+      tab4.setAttribute('class', 'tab')
+      tab4.firstChild.setAttribute('class', '')
+      }
       tab1.setAttribute('class', 'tab')
       tab2.setAttribute('class', 'tab pt-3 px-3')
       tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab')
       tab1.firstChild.setAttribute('class', '')
       tab2.firstChild.setAttribute('class', 'text-success')
       tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', '')
       this.page = 2
     },
     page3: function () {
       const tab1 = document.querySelector('#page1')
       const tab2 = document.querySelector('#page2')
       const tab3 = document.querySelector('#page3')
+      if (this.user.username === this.anotherUser.username) {
       const tab4 = document.querySelector('#page4')
+      tab4.setAttribute('class', 'tab')
+      tab4.firstChild.setAttribute('class', '')
+      }
       tab1.setAttribute('class', 'tab')
       tab2.setAttribute('class', 'tab')
       tab3.setAttribute('class', 'tab pt-3 px-3')
-      tab4.setAttribute('class', 'tab')
       tab1.firstChild.setAttribute('class', '')
       tab2.firstChild.setAttribute('class', '')
       tab3.firstChild.setAttribute('class', 'text-success')
-      tab4.firstChild.setAttribute('class', '')
       this.page = 3
     },
     page4: function () {
@@ -145,14 +164,14 @@ export default {
       const tab2 = document.querySelector('#page2')
       const tab3 = document.querySelector('#page3')
       const tab4 = document.querySelector('#page4')
+      tab4.setAttribute('class', 'tab pt-3 px-3')
+      tab4.firstChild.setAttribute('class', 'text-success')
       tab1.setAttribute('class', 'tab')
       tab2.setAttribute('class', 'tab')
       tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab pt-3 px-3')
       tab1.firstChild.setAttribute('class', '')
       tab2.firstChild.setAttribute('class', '')
       tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', 'text-success')
       this.page = 4
     },
   },

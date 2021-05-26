@@ -185,7 +185,7 @@ export default {
       this.myArticles = myArticles.length
     },
     goPage3: function () {
-      this.$emit("getPage3")
+      this.$emit("goPage3")
     },
     checkEmail: function () {
       console.log('checkEmail')
