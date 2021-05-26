@@ -237,6 +237,7 @@ export default {
         .then((res)=> {
           // console.log(res)
           this.getReviews()
+          return res
         })
         .catch(err => {
           console.log(err)
@@ -255,7 +256,7 @@ export default {
         headers: this.setToken()
       })
       .then((res)=> {
-        // console.log(res.data)
+        console.log(res.data)
         this.likedCount = res.data.count
         this.likeUsers = res.data.movie.like_users
         console.log(this.likeUsers)

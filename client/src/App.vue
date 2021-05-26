@@ -45,11 +45,13 @@
           <!-- mouseover style을 줘야 한다. -->
           <div class="nav-item navbar p-0" v-if="isLogin">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img class="me-2" src="@/assets/img.jpg" style="width:40px; height:40px; border-radius:20px;"> {{ user.username }}
+              <img class="me-2" :src="user.image" style="width:40px; height:40px; border-radius:20px;" v-if="user.image">
+              <img class="me-2" src="@/assets/img.jpg" style="width:40px; height:40px; border-radius:20px;" v-else>
+              {{ user.username }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end bg-dark mt-4" style="font-size:20px;" aria-labelledby="navbarDropdown">
-              <li>
-                <router-link to="/profile" class="dropdown-item">내 정보</router-link>
+              <li @click="getAnotherUser">
+                <a class="dropdown-item" href="#">내 정보</a>
               </li>
               <li><a class="dropdown-item" href="#">플레이리스트</a></li>
               <li><hr class="dropdown-divider bg-light"></li>
@@ -137,7 +139,13 @@ export default {
       localStorage.removeItem('jwt')
       this.$store.dispatch('logout')
       this.$router.push({ name: 'Login' })
-    }
+    },
+    getAnotherUser: function () {
+      this.$store.dispatch('getAnotherUser', this.user)
+      this.$router.push({ name: 'Profile' }).catch(() => {
+        this.$router.go(this.$router.currentPage)
+      })
+    },
     /* 이곳에 methods로 검색 기능 넣어줘야 함 */
   },
   computed: {
