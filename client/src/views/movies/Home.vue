@@ -77,7 +77,8 @@ export default {
     getMovie: function (movie) {
       this.$store.dispatch('getMovie', movie)
       this.$router.push({name: 'MovieDetail'})
-    }
+    },
+    
   }
 }
 </script>

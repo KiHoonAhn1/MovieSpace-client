@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex mt-3">
+  <div class="d-flex mt-3 test">
     <img :src="getImage(video.poster_path)" style="width:80px; height:100px; cursor:pointer;" @click="toDetail(video)">
     <div class="d-flex align-items-center ms-4" style="cursor:pointer;" @click="toDetail(video)"><h5 id="colorchange">{{ video.title }}</h5></div>
   </div>
@@ -19,15 +19,7 @@ export default {
     getImage: function (url) {
       return 'https://image.tmdb.org/t/p/original'+ url
     },
-    // setToken: function () {
-    //   const token = localStorage.getItem('jwt')
-    //   const config = {
-    //     Authorization: `JWT ${token}`
-    //   }
-    //   return config
-    // },
     toDetail: function (video) {
-      // this.$router.push({name: 'MovieDetail', params: {movie:this.video}})
       this.$store.dispatch('getMovie', video)
       this.$router.go(this.$router.currentRoute)
     },
@@ -41,6 +33,11 @@ export default {
   }
   #colorchange:hover {
     color:crimson;
+  }
+  .test {
+    border-style:solid;
+    border-width:2px;
+    border-color: #212529 #212529 #6d6868 #212529;
   }
 
 </style>
