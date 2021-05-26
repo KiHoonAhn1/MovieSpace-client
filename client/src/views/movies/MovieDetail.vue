@@ -8,7 +8,7 @@
           <h1><strong>{{ movie.title }}</strong></h1>
           <div class="d-flex flex-column justify-content-center me-3">
             <!-- 좋아요기능 -->
-            <div v-if="liked === user.id">
+            <div v-if="liked">
               <i class="fas fa-heart fa-3x" style="color:crimson; cursor:pointer;" size="lg" @click="likeMovie"></i>
             </div>
             <div v-else>
