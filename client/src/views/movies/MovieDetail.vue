@@ -1,6 +1,6 @@
 <template>
   <div class="text-white container bg-dark">
-    
+    <span onclick="history.back()" class="close" title="Close PopUp"></span>
     <div class="d-flex m-3 row">
       
       <div class="p-4 d-flex flex-column mt-3 col-8">
@@ -8,7 +8,7 @@
           <h1><strong>{{ movie.title }}</strong></h1>
           <div class="d-flex flex-column justify-content-center me-3">
             <!-- 좋아요기능 -->
-            <div v-if="liked === user.id">
+            <div v-if="liked">
               <i class="fas fa-heart fa-3x" style="color:crimson; cursor:pointer;" size="lg" @click="likeMovie"></i>
             </div>
             <div v-else>
@@ -154,6 +154,7 @@ export default {
 
     axios.get(VIDEO_URL)
     .then(response => {
+      console.log(response)
       this.movieVideo = response.data.results[0].key
     })
 
@@ -358,6 +359,18 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.close {
+    position: static;
+    right: 25px;
+    top: 0;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+}
+.close:hover,.close:focus {
+    color: red;
+    cursor: pointer;
 }
 
 </style>

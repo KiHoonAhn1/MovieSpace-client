@@ -14,7 +14,7 @@
           </h2>
           <button class="d-inline ms-4 btn-sm" style="vertical-align:text-bottom" @click="follow" v-if="anotherUser.username != user.username">팔로우</button>
           <h4>
-            Your work tag
+            {{ anotherUser.last_name }}
           </h4>
           <p class="text-dark" v-if="anotherUser.description">
             {{ anotherUser.description }}
@@ -157,7 +157,7 @@ export default {
       checkGenres: [],
       date: '',
       followed: '',
-      followedUsers: [],
+      followerUsers: [],
       followingCount: '',
       followedCount: '',
     }
@@ -235,6 +235,15 @@ export default {
       })
         .then(res => {
           console.log(res.data)
+          // this.followedCountCount = res.data.count
+          // this.likeUsers = res.data.movie.like_users
+          // console.log(this.likeUsers)
+          // this.liked = this.likeUsers.find((users) => {
+          //   return users === this.user.id
+          // })
+          // if (this.liked === undefined) {
+          //   this.liked = false
+          // }
         })
     }
   }

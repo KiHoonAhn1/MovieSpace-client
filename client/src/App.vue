@@ -51,7 +51,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end bg-dark mt-4" style="font-size:20px;" aria-labelledby="navbarDropdown">
               <li @click="getAnotherUser">
-                <a class="dropdown-item" href="#">내 정보</a>
+                <a class="dropdown-item" href="">내 정보</a>
               </li>
               <li><a class="dropdown-item" href="#">플레이리스트</a></li>
               <li><hr class="dropdown-divider bg-light"></li>

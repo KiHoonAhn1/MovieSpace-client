@@ -1,161 +1,48 @@
 <template>
-  <div class="main-container text-dark">
-    <div class="main wrapper clearfix">
-      <div id="tab-container" class="tab-container">
-        <!-- Tab List -->
-        <ul class='etabs'>
-          <li class='tab' id="page1" @click="page1">
-            <span>
-              내 정보
-            </span>
-          </li>
-
-          <li class='tab' id="page2" @click="page2">
-            <span>
-              플레이리스트
-            </span>
-          </li>
-
-          <li class='tab' id="page3" @click="page3">
-            <span>
-              게시물/댓글
-            </span>
-          </li>
-
-          <li class='tab' id="page4" @click="page4">
-            <span>
-              정보 수정
-            </span>
-          </li>
-        </ul>
-
-        <!-- End Tab List -->
-        <!-- ----------------------------------------------------------------------------------- -->
-        <!-- Code for differents Tabs strat from here. -->
-        <div id="tab-data-wrap">
-          <!-- About Tab Data -->
-          <div v-if="this.page===1">
-            <AboutMe @getPage3="getPage3"/>
+  <div>
+    <div id="contact">
+      <section class="clearfix">
+        <div class="g1 mt-4 text-start">
+          <div class="photo">
+            <img src="@/assets/img.jpg" alt="" class="">
           </div>
-          <!-- End About Tab Data -->
-          <!-- ----------------------------------------------------------------------------------- -->
-          <!-- skills Tab Data -->
-          <div v-else-if="this.page===2">
-            <Playlists />
+          <div class="text-center">
+            <button>이미지 변경</button>
           </div>
-          <!-- End skills Tab Data -->
-          <!-- ----------------------------------------------------------------------------------- -->
-          <!-- Projects Tab Data -->
-          <div v-else-if="this.page===3">
-            <Posts />
-          </div>
-          <!-- End Projects tab -->
-          <!-- ----------------------------------------------------------------------------------- -->
-          <!-- Contact Tab Data -->
-          <div v-else-if="this.page===4">
-            <MyPage />
-          </div>
-
-          <div v-else-if="this.page===5">
-            <MyUpdate />
-          </div>
-          <!-- End Contact Data -->
-          <!-- ----------------------------------------------------------------------------------- -->
+          ㅎㅇㅎㅇ
+          <br>
+          
         </div>
-      </div>
+        <div class="g2 text-start mt-5">
+            <div class="container">
+              <label for="my_id" class="ms-4 mb-0 fs-4 fw-bold">ID</label>
+              <input type="text" placeholder="아이디를 입력해주세요" name="my_id" class="mb-3" readonly>
+              <label for="my_pwd" class="ms-4 mb-0 fs-4 fw-bold">PASSWORD</label>
+              <input type="text" placeholder="비밀번호를 입력해주세요" name="my_pwd" class="mb-3">
+              <label for="my_name" class="ms-4 mb-0 fs-4 fw-bold">NAME</label>
+              <input type="text" placeholder="이름을 입력해주세요" name="my_name" class="mb-3">
+              <label for="my_email" class="ms-4 mb-0 fs-4 fw-bold">EMAIL</label>
+              <input type="text" placeholder="이메일 혹은 github 주소를 입력해주세요" name="my_email" class="mb-3">
+              <label for="my_email" class="ms-4 mb-0 fs-4 fw-bold">INTRODUCTION</label>
+              <textarea class="project_description mb-3" rows="3" placeholder="인사말을 입력해주세요" readonly></textarea>
+              <label for="my_email" class="ms-4 mb-0 fs-4 fw-bold">BIRTH</label>
+              <b-form-datepicker id="example-datepicker" style="width:85%" v-model="value" class="ms-4 mb-2"></b-form-datepicker>
+              <button class="project_submit" type="submit">Submit</button>
+              <button class="project_submit project_cancel" type="submit">Cancel</button>
+            </div>
+        </div>
+        <div class="g1">
+          hi
+        </div>
+        <div class="break"></div>
+      </section>
     </div>
-  </div>
+  </div>  
 </template>
 
 <script>
-import AboutMe from '@/components/accounts/AboutMe.vue'
-import Playlists from '@/components/accounts/Playlists.vue'
-import Posts from '@/components/accounts/Posts.vue'
-import MyPage from '@/components/accounts/MyPage.vue'
-import MyUpdate from '@/components/accounts/MyUpdate.vue'
-
 export default {
-  name: 'Profile',
-  components: {
-    AboutMe,
-    Playlists,
-    Posts,
-    MyPage,
-    MyUpdate
-  },
-  data: function () {
-    return {
-      page: 1,
-    }
-  },
-  mounted: function () {
-    this.page1()
-  },
-  methods: {
-    getPage3: function () {
-      this.page3()
-    },
-    page1: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab pt-3 px-3')
-      tab2.setAttribute('class', 'tab')
-      tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab')
-      tab1.firstChild.setAttribute('class', 'text-success')
-      tab2.firstChild.setAttribute('class', '')
-      tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', '')
-      this.page = 1
-    },
-    page2: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab')
-      tab2.setAttribute('class', 'tab pt-3 px-3')
-      tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab')
-      tab1.firstChild.setAttribute('class', '')
-      tab2.firstChild.setAttribute('class', 'text-success')
-      tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', '')
-      this.page = 2
-    },
-    page3: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab')
-      tab2.setAttribute('class', 'tab')
-      tab3.setAttribute('class', 'tab pt-3 px-3')
-      tab4.setAttribute('class', 'tab')
-      tab1.firstChild.setAttribute('class', '')
-      tab2.firstChild.setAttribute('class', '')
-      tab3.firstChild.setAttribute('class', 'text-success')
-      tab4.firstChild.setAttribute('class', '')
-      this.page = 3
-    },
-    page4: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab')
-      tab2.setAttribute('class', 'tab')
-      tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab pt-3 px-3')
-      tab1.firstChild.setAttribute('class', '')
-      tab2.firstChild.setAttribute('class', '')
-      tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', 'text-success')
-      this.page = 4
-    },
-  },
+  name: 'MyPage'
 }
 </script>
 
@@ -655,7 +542,6 @@ body {
 .etabs {
   margin: 0;
   padding: 0px;
-  padding-top: 5px;
   text-align: center;
 }
 
@@ -682,7 +568,6 @@ body {
   -moz-border-radius: 4px 4px 0 0;
   -webkit-border-radius: 4px 4px 0 0;
   margin-right: 10px;
-  cursor: pointer;
 }
 
 .tab a {
@@ -713,7 +598,7 @@ body {
   color: #2E8B57;
 }
 
-.tab span {
+.tab a i {
   font-size: 16px;
   margin-right: 0px;
 }
@@ -1069,6 +954,16 @@ input[type=text], .project_description, input[type=url] {
   width: 85%;
   font-size:20px;
 }
+.project_cancel {
+  background-color: red;
+  color: white;
+  padding: 14px 20px;
+  margin: 5px 26px;
+  border: none;
+  cursor: pointer;
+  width: 85%;
+  font-size:20px;
+}
 .project_submit:hover {
     opacity: 0.8;
 }
@@ -1335,16 +1230,16 @@ Change widths as necessary
     display: inline;
   }
 
-  .tab span {
+  .tab a i {
     font-size: 16px;
     margin-right: 6px;
   }
 
-  .tab span {
+  .tab a {
     padding: 10px 40px 10px 40px;
   }
 
-  .tab span.active {
+  .tab a.active {
     padding-top: 20px;
   }
 
@@ -1457,9 +1352,4 @@ tbody {
   vertical-align: middle;
   display: grid;
 }
-
-.tab-container {
-}
-
-
 </style>

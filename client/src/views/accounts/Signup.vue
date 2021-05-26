@@ -14,11 +14,11 @@
         <div class="input-group tm-mb-30">
           <input name="lastname" type="text" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="이름" v-model="credentials.last_name" required>
         </div>
-        <div class="input-group tm-mb-30">
-          <input name="birth" type="date" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="생일" v-model="credentials.birth" required>
+        <div class="input tm-mb-30" @click="text">
+          <b-form-datepicker id="signup" v-model="credentials.birth" class="form-control rounded-0 border-top-0 border-end-0 border-start-0 text-white"></b-form-datepicker>
         </div>
         <div class="input-group justify-content-end">
-          <input type="button" class="btn btn-primary tm-btn-pad-2" value="Send" @click="signup(credentials)">
+          <input type="button" class="btn btn-primary tm-btn-pad-2" value="Send" @click="signup()">
         </div>
       </div>
     </div>
@@ -80,6 +80,10 @@ export default {
           console.log(err)
         })
     },
+    text: function () {
+      const label = document.querySelector('#signup__value_')
+      label.setAttribute('class', 'form-control text-dark')
+    }
   },
 
 }
@@ -91,6 +95,7 @@ export default {
 }
 
 .form-control {
+    color: white;
     font-size: 1.2rem;
     padding: 15px 0;
 }
@@ -106,6 +111,7 @@ export default {
     outline: 0;
     -webkit-box-shadow: none;
     box-shadow: none;
+    color: white;
 }
 
 .form-control::-webkit-input-placeholder { color: white; }
@@ -123,6 +129,10 @@ export default {
 
 .tm-btn-pad-2 {
     padding: 10px 38px;
+}
+
+.tm-btn-pad-2:hover {
+    color: green;
 }
 
 .btn {
@@ -146,5 +156,6 @@ export default {
 input:focus::placeholder {
   color: grey;
 }
+
 /* Signup CSS end */
 </style>

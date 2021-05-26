@@ -55,6 +55,7 @@ export default {
         })
         .catch(err => {
           console.log(err)
+          alert('아이디 혹은 비밀번호가 틀렸습니다.')
         })
       const decode = jwt.verify(this.token, secretkey)
       await axios({
@@ -69,15 +70,6 @@ export default {
         .catch(err => {
           console.log(err)
         })
-      // user 프로필을 받아서 state에 담아주자
-      // axios.get(`http://127.0.0.1:8000/accounts/${this.credentials.username}`)
-      //   .then(res => {
-      //     this.$store.dispatch('getUser', res.data)
-      //     console.log(res)
-      //   })
-      //   .catch(err => {
-      //     console.log(err)
-      //   })
     }
   }
 }
@@ -122,6 +114,10 @@ export default {
 
 .tm-btn-pad-2 {
     padding: 10px 38px;
+}
+
+.tm-btn-pad-2:hover {
+    color: green;
 }
 
 .btn {
