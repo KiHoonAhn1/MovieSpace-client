@@ -79,12 +79,31 @@
           <b-table 
           id="my-table"
           :items="reviewList"
-          :fields="['username','score', 'content', 'updated_at']"
+          :fields="['username','score', 'content', 'updated_at', 'etc']"
           :per-page="perPage"
           :current-page="currentPage"
           class="table table-striped custom-table"
           small
           >
+            <template #cell(etc)="row">
+              <div v-if="row.item.username === user.username">
+                <b-button size="sm" class="mr-2 me-3" @click="row.toggleDetails">
+                  수정
+                </b-button>
+                <div @click="deleteComment(row.item)" class="d-inline">
+                  <b-button size="sm" class="mr-2 btn-danger">
+                    삭제
+                  </b-button>
+                </div>
+              </div>
+            </template>
+            <template #row-details="row">
+              <b-card class="text-start" style="background-color:transparent">
+                <input type="text" :value="row.item.content" style="width:85%;">
+                <button @click="updateComment(row), row.toggleDetails" class="btn-secondary mx-2">확인</button>
+                <button @click="row.toggleDetails" class="btn-warning">취소</button>
+              </b-card>
+            </template>            
           </b-table>
           <b-pagination
             v-model="currentPage"
@@ -292,7 +311,49 @@ export default {
       .catch((error) =>{
         console.log(error)
       })
+    },
+    updateComment: function (comment) {
+      const commentHTML = document.querySelector(`#my-table__details_${comment.index}_`)
+      const content = commentHTML.firstChild.firstChild.childNodes[2].childNodes[2].value
+      const commentInfo = {
+				content: content,
+				username: comment.item.username,
+			}
+      axios({
+        method: 'put',
+        url: `http://127.0.0.1:8000/movie/${this.movie.id}/review/${comment.item.id}/`,
+        data: commentInfo,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          this.reviewList[comment.index].content = content
+          return res
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    deleteComment: function (comment) {
+      axios({
+        method: 'delete',
+        url: `http://127.0.0.1:8000/community/${this.article.id}/comment/${comment.id}`,
+        data: {},
+        headers: this.setToken(),
+      })
+        .then(res => {
+          const newComments = this.comments.filter(x => {
+            return x != comment
+          })
+          this.$store.dispatch('getComments', newComments)
+          return res
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
+
+
+
   },
 }
 </script>

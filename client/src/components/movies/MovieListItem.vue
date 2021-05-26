@@ -9,7 +9,7 @@
     :controls-visible="true" 
     :display="5"
     :border="0"
-    :height="200"
+    :height="450"
     :width="300"
     style="background-color:transparent;"
     >

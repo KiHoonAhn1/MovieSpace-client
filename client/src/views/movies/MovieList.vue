@@ -73,15 +73,18 @@ export default {
       .then((res)=>{
         // console.log(res.data)
         this.likegenres = res.data['data']
-        console.log(this.likegenres)
+        // console.log(this.likegenres)
         // console.log(this.user.like_genres)
       })
     },
     // 사용자가 좋아하는 장르 이름 가져오기
     getGenres: function () {
+      // console.log(this.genres)
+      console.log(this.user.like_genres)
       this.genreList = this.genres.filter((genre) => {
         return this.user.like_genres.includes(genre.id)
       })
+      // console.log(this.genreList)
       // [ { "id": 12, "name": "모험" }, { "id": 16, "name": "애니메이션" } ]
     },
   }

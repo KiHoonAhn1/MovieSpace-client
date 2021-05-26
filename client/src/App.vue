@@ -115,6 +115,23 @@ export default {
     .then((res)=> {
       this.$store.dispatch('getGenres', res.data)
     })
+
+    axios({
+      method: 'get',
+      url: 'http://127.0.0.1:8000/movies/best/',
+      data: {},
+      headers: this.setToken()
+    })
+    .then((res)=>{
+      // console.log(res.data)
+      this.$store.dispatch('getBests', res.data)
+      // this.bestmovies = res.data
+      // console.log(this.bestmovies)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    
   },
   /* DOM이 모두 구성된 후에 인식할 수 있으므로 mounted 사용 */
   mounted: function () {

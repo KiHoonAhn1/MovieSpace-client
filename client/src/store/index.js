@@ -17,6 +17,7 @@ export default new Vuex.Store({
     article: {},
     comments: [],
     genres: [],
+    bestMovies: [],
   },
   mutations: {
     GET_MOVIES: function (state, movies) {
@@ -27,6 +28,9 @@ export default new Vuex.Store({
     },
     GET_GENRES: function (state, genres) {
       state.genres = genres
+    },
+    GET_BESTS: function (state, movies) {
+      state.bestMovies = movies
     },
     GET_USER: function (state, user) {
       state.user = user
@@ -56,6 +60,9 @@ export default new Vuex.Store({
     },
     getGenres: function({commit}, genres) {
       commit('GET_GENRES', genres)
+    },
+    getBests: function({commit}, movies) {
+      commit('GET_BESTS', movies)
     },
     getUser: function({commit}, user) {
       commit('GET_USER', user)
