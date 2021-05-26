@@ -6,7 +6,7 @@
       :fields="['id', 'content', 'username', 'created_at', 'etc']"
       :per-page="perPage"
       :current-page="currentPage"
-      class="table table-striped custom-table"
+      class="table custom-table"
       small
       style="cursor:default;"
     >

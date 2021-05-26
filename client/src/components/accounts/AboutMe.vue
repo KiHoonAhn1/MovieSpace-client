@@ -1,155 +1,200 @@
 <template>
-  <div class="main-container text-dark">
-    <div class="main wrapper clearfix">
-      <div id="tab-container" class="tab-container">
-        <!-- Tab List -->
-        <ul class='etabs'>
-          <li class='tab' id="page1" @click="page1">
-            <span>
-              내 정보
-            </span>
-          </li>
-
-          <li class='tab' id="page2" @click="page2">
-            <span>
-              플레이리스트
-            </span>
-          </li>
-
-          <li class='tab' id="page3" @click="page3">
-            <span>
-              게시물/댓글
-            </span>
-          </li>
-
-          <li class='tab' id="page4" @click="page4">
-            <span>
-              정보 수정
-            </span>
-          </li>
-        </ul>
-
-        <!-- End Tab List -->
-        <!-- ----------------------------------------------------------------------------------- -->
-        <!-- Code for differents Tabs strat from here. -->
-        <div id="tab-data-wrap">
-          <!-- About Tab Data -->
-          <div v-if="this.page===1">
-            <AboutMe @getPage3="getPage3"/>
-          </div>
-          <!-- End About Tab Data -->
-          <!-- ----------------------------------------------------------------------------------- -->
-          <!-- skills Tab Data -->
-          <div v-if="this.page===2">
-            <Playlists />
-          </div>
-          <!-- End skills Tab Data -->
-          <!-- ----------------------------------------------------------------------------------- -->
-          <!-- Projects Tab Data -->
-          <div v-if="this.page===3">
-            <Posts />
-          </div>
-          <!-- End Projects tab -->
-          <!-- ----------------------------------------------------------------------------------- -->
-          <!-- Contact Tab Data -->
-          <div v-if="this.page===4">
-            <ProfileUpdate />
-          </div>
-          <!-- End Contact Data -->
-          <!-- ----------------------------------------------------------------------------------- -->
+<div>
+  <div id="about" class="text-start">
+    <section class="clearfix">
+      <div class="g2">
+        <div class="photo">
+          <img :src="user.image" alt="Your alt text" v-if="user.image">
+          <img src="@/assets/img.jpg" alt="" v-else>
+        </div>
+        <div class="info">
+          <h2 class="d-inline">
+            <p></p>
+            {{ user.username }}
+          </h2>
+          <button class="d-inline ms-4 btn-sm" style="vertical-align:text-bottom">팔로우</button>
+          <h4>
+            Your work tag
+          </h4>
+          <p class="text-dark" v-if="user.description">
+            {{ user.description }}
+          </p>
+          <p class="text-dark" v-else>
+            인사말을 등록해주세요.
+          </p>
         </div>
       </div>
-    </div>
+
+      <div class="g1">
+        <div class="main-links sidebar">
+          <ul>
+            <li>
+              <a href="#">
+                팔로잉
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                팔로워
+              </a>
+            </li>
+            <li>
+              <span class="me-3">게시물</span>
+              <a @click="goPage3" style="font-weight:bold; font-size:20px; cursor:pointer;">
+                {{ myArticles }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="break">
+      </div>
+      <div class="contact-info">
+        <div class="g1">
+          <div class="item-box clearfix">
+            <i class="icon-envelope"></i>
+            <div class="item-data">
+              <h3>
+                <!-- 여기를 모달로 바꾸자! -->
+                <a href="#" onclick="document.getElementById('modal-wrapper').style.display='block'">
+                  좋아하는 장르 선택하기
+                </a>
+                <!-- modal start -->
+                <div id="modal-wrapper" class="modal">
+                  <form class="modal-content animate">
+                    <div class="imgcontainer">
+                      <span onclick="document.getElementById('modal-wrapper').style.display='none'" class="close" title="Close PopUp">&times;</span>
+                      <img src="@/assets/rocket.jpg" alt="project" class="avatar">
+                      <h1 class="project_details" style="text-align:center">Select Genres</h1>
+                    </div>
+                    <div class="container">
+                      <span v-for="(genre, idx) in genres" :key="idx" class="m-1 d-inline">
+                        <input type="checkbox" placeholder="Project Name" name="uname" class="" v-model="checkGenres" :value="genre">
+                        <label for="uname">{{ genre.name }}</label>
+                        <br v-if="(idx+1)%5 === 0 & idx != 0">
+                      </span>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" style="background-color:#2E74FA" @click="selectGenres">확인</button>
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('modal-wrapper').style.display='none'" ss="modal-wrapper">Close</button>
+                      </div>
+                      <!-- <button class="project_submit" type="submit">Submit</button> -->
+                    </div>
+                  </form>
+                </div>
+                <!-- modal end -->
+              </h3>
+              <p v-if="user.genres">
+                {{ myGenres }}
+              </p>
+              <p v-else>
+                선택한 장르가 없습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="g1">
+          <div class="item-box clearfix">
+            <i class="icon-facebook"></i>
+            <div class="item-data">
+              <h3>
+                <a href="http://fb.me/your-Username">
+                  Add Facebook Link
+                </a>
+              </h3>
+              <p>
+                Facebook Profile
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="g1">
+          <div class="item-box clearfix">
+            <i class="icon-twitter"></i>
+            <div class="item-data">
+              <h3>
+                <a href="#" v-if="user.email">
+                  깃허브
+                </a>
+                <a href="#" v-else-if="user">
+                  이메일
+                </a>
+                <a href="#" v-else>
+                  이메일을 등록해주세요.
+                </a>
+              </h3>
+              <p>
+                Twitter Handle
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
+</div>
 </template>
 
 <script>
-import AboutMe from '@/components/accounts/AboutMe.vue'
-import Playlists from '@/components/accounts/Playlists.vue'
-import Posts from '@/components/accounts/Posts.vue'
-import ProfileUpdate from '@/components/accounts/ProfileUpdate.vue'
+import { mapState } from 'vuex'
+import axios from 'axios'
 
 export default {
-  name: 'Profile',
-  components: {
-    AboutMe,
-    Playlists,
-    Posts,
-    ProfileUpdate,
+  name: 'AboutMe',
+  mounted: function () {
+    this.getMyArticles()
+    console.log(this.user)
+    this.getMyGenres()
+    this.myGenres = this.checkGenres.join(', ')
   },
   data: function () {
     return {
-      page: 1,
+      myArticles: 0,
+      myGenres: [],
+      checkGenres: [],
     }
   },
-  mounted: function () {
-    this.page1()
+  computed: {
+    ...mapState([
+      'user',
+      'articles',
+      'genres',
+    ])
   },
   methods: {
-    getPage3: function () {
-      this.page3()
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
     },
-    page1: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab pt-3 px-3')
-      tab2.setAttribute('class', 'tab')
-      tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab')
-      tab1.firstChild.setAttribute('class', 'text-success')
-      tab2.firstChild.setAttribute('class', '')
-      tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', '')
-      this.page = 1
+    getMyArticles: function () {
+      const myArticles = this.articles.filter(article => {
+        return article.username === this.user.username
+      })
+      this.myArticles = myArticles.length
     },
-    page2: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab')
-      tab2.setAttribute('class', 'tab pt-3 px-3')
-      tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab')
-      tab1.firstChild.setAttribute('class', '')
-      tab2.firstChild.setAttribute('class', 'text-success')
-      tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', '')
-      this.page = 2
+    goPage3: function () {
+      this.$emit("getPage3")
     },
-    page3: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab')
-      tab2.setAttribute('class', 'tab')
-      tab3.setAttribute('class', 'tab pt-3 px-3')
-      tab4.setAttribute('class', 'tab')
-      tab1.firstChild.setAttribute('class', '')
-      tab2.firstChild.setAttribute('class', '')
-      tab3.firstChild.setAttribute('class', 'text-success')
-      tab4.firstChild.setAttribute('class', '')
-      this.page = 3
+    checkEmail: function () {
+      console.log('checkEmail')
     },
-    page4: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab')
-      tab2.setAttribute('class', 'tab')
-      tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab pt-3 px-3')
-      tab1.firstChild.setAttribute('class', '')
-      tab2.firstChild.setAttribute('class', '')
-      tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', 'text-success')
-      this.page = 4
+    selectGenres: function () {
+      console.log(this.myGenres)
     },
-  },
+    getMyGenres: function () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8000/accounts/${this.user.id}/like_genres/`,
+        data: {},
+        headers: this.setToken(),
+      })
+        .then(res => {
+          console.log(res)
+        })
+    }
+  }
 }
 </script>
 
@@ -649,7 +694,6 @@ body {
 .etabs {
   margin: 0;
   padding: 0px;
-  padding-top: 5px;
   text-align: center;
 }
 
@@ -676,7 +720,6 @@ body {
   -moz-border-radius: 4px 4px 0 0;
   -webkit-border-radius: 4px 4px 0 0;
   margin-right: 10px;
-  cursor: pointer;
 }
 
 .tab a {
@@ -707,7 +750,7 @@ body {
   color: #2E8B57;
 }
 
-.tab span {
+.tab a i {
   font-size: 16px;
   margin-right: 0px;
 }
@@ -735,6 +778,7 @@ body {
   letter-spacing: 2px;
   margin-bottom: .3em;
   color: #fff;
+  font-weight: bolder;
 }
 
 .info h2, #header h2 {
@@ -742,11 +786,13 @@ body {
   letter-spacing: 2px;
   margin-bottom: .2em;
   margin-top: 0.5em;
+  font-weight: bolder;
 }
 
 .info h4, #header h4 {
   color: #59BD85;
   margin-bottom: 2em;
+  font-weight: bolder;
 }
 
 .info h6, #header h6 {
@@ -809,6 +855,7 @@ body {
   line-height: 1em;
   margin: 3px 0px 0px 0px;
   font-size: 1em;
+  font-weight: bolder;
 }
 
 .item-box .item-data p {
@@ -1329,16 +1376,16 @@ Change widths as necessary
     display: inline;
   }
 
-  .tab span {
+  .tab a i {
     font-size: 16px;
     margin-right: 6px;
   }
 
-  .tab span {
+  .tab a {
     padding: 10px 40px 10px 40px;
   }
 
-  .tab span.active {
+  .tab a.active {
     padding-top: 20px;
   }
 
@@ -1451,9 +1498,4 @@ tbody {
   vertical-align: middle;
   display: grid;
 }
-
-.tab-container {
-}
-
-
 </style>

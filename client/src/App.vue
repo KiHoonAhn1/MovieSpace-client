@@ -91,6 +91,10 @@ export default {
     axios.get(URL)
       .then(response => {
         this.$store.dispatch('getMovies', response.data)
+        return response
+      })
+      .catch(error => {
+        console.log(error)
       })
     // token이 있으면 로그인 처리
     const token = localStorage.getItem('jwt')

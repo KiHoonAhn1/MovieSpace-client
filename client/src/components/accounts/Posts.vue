@@ -1,154 +1,140 @@
 <template>
-  <div class="main-container text-dark">
-    <div class="main wrapper clearfix">
-      <div id="tab-container" class="tab-container">
-        <!-- Tab List -->
-        <ul class='etabs'>
-          <li class='tab' id="page1" @click="page1">
-            <span>
-              내 정보
+  <div>
+    <div id="resume">
+      <section class="clearfix">
+        <div class="g2">
+          <h3>
+            게시물
+          </h3>
+          <div class="text-secondary text-end me-1 mb-2">더 보기</div>
+          <div class="meter emerald">
+            <span style="width: 100%">
+              <span>
+                Language 1
+              </span>
             </span>
-          </li>
-
-          <li class='tab' id="page2" @click="page2">
-            <span>
-              플레이리스트
+          </div>
+          <div class="meter emerald">
+            <span style="width: 90%">
+              <span>
+                Language 2
+              </span>
             </span>
-          </li>
-
-          <li class='tab' id="page3" @click="page3">
-            <span>
-              게시물/댓글
+          </div>
+          <div class="meter emerald">
+            <span style="width: 70%">
+              <span>
+                Language 3
+              </span>
             </span>
-          </li>
-
-          <li class='tab' id="page4" @click="page4">
-            <span>
-              정보 수정
+          </div>
+          <div class="meter emerald">
+            <span style="width: 65%">
+              <span>
+                Language 4
+              </span>
             </span>
-          </li>
-        </ul>
-
-        <!-- End Tab List -->
-        <!-- ----------------------------------------------------------------------------------- -->
-        <!-- Code for differents Tabs strat from here. -->
-        <div id="tab-data-wrap">
-          <!-- About Tab Data -->
-          <div v-if="this.page===1">
-            <AboutMe @getPage3="getPage3"/>
           </div>
-          <!-- End About Tab Data -->
-          <!-- ----------------------------------------------------------------------------------- -->
-          <!-- skills Tab Data -->
-          <div v-if="this.page===2">
-            <Playlists />
+          <div class="meter emerald">
+            <span style="width: 85%">
+              <span>
+                Language 5
+              </span>
+            </span>
           </div>
-          <!-- End skills Tab Data -->
-          <!-- ----------------------------------------------------------------------------------- -->
-          <!-- Projects Tab Data -->
-          <div v-if="this.page===3">
-            <Posts />
-          </div>
-          <!-- End Projects tab -->
-          <!-- ----------------------------------------------------------------------------------- -->
-          <!-- Contact Tab Data -->
-          <div v-if="this.page===4">
-            <ProfileUpdate />
-          </div>
-          <!-- End Contact Data -->
-          <!-- ----------------------------------------------------------------------------------- -->
+          <div class="break"></div>
         </div>
-      </div>
+        <div class="g1">
+          <h3>
+            댓글
+          </h3>
+          <div class="text-secondary text-end me-1 mb-2">더 보기</div>
+          <div class="meter emerald">
+            <span style="width: 70%">
+              <span>
+                skill 1
+              </span>
+            </span>
+          </div>
+          <div class="meter emerald">
+            <span style="width: 85%">
+              <span>
+                skill 2
+              </span>
+            </span>
+          </div>
+          <div class="meter emerald">
+            <span style="width: 80%">
+              <span>
+                skill 3
+              </span>
+            </span>
+          </div>
+          <div class="meter emerald">
+            <span style="width: 90%">
+              <span>
+                skill 4
+              </span>
+            </span>
+          </div>
+          <div class="meter emerald">
+            <span style="width: 65%">
+              <span>
+                skill 5
+              </span>
+            </span>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script>
-import AboutMe from '@/components/accounts/AboutMe.vue'
-import Playlists from '@/components/accounts/Playlists.vue'
-import Posts from '@/components/accounts/Posts.vue'
-import ProfileUpdate from '@/components/accounts/ProfileUpdate.vue'
+import $ from 'jquery'
+import { mapState } from 'vuex'
 
 export default {
-  name: 'Profile',
-  components: {
-    AboutMe,
-    Playlists,
-    Posts,
-    ProfileUpdate,
-  },
+  name: 'Posts',
   data: function () {
     return {
-      page: 1,
+
     }
   },
-  mounted: function () {
-    this.page1()
+  computed: {
+    ...mapState([
+      'comments',
+      'articles',
+    ])
   },
-  methods: {
-    getPage3: function () {
-      this.page3()
-    },
-    page1: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab pt-3 px-3')
-      tab2.setAttribute('class', 'tab')
-      tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab')
-      tab1.firstChild.setAttribute('class', 'text-success')
-      tab2.firstChild.setAttribute('class', '')
-      tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', '')
-      this.page = 1
-    },
-    page2: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab')
-      tab2.setAttribute('class', 'tab pt-3 px-3')
-      tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab')
-      tab1.firstChild.setAttribute('class', '')
-      tab2.firstChild.setAttribute('class', 'text-success')
-      tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', '')
-      this.page = 2
-    },
-    page3: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab')
-      tab2.setAttribute('class', 'tab')
-      tab3.setAttribute('class', 'tab pt-3 px-3')
-      tab4.setAttribute('class', 'tab')
-      tab1.firstChild.setAttribute('class', '')
-      tab2.firstChild.setAttribute('class', '')
-      tab3.firstChild.setAttribute('class', 'text-success')
-      tab4.firstChild.setAttribute('class', '')
-      this.page = 3
-    },
-    page4: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab')
-      tab2.setAttribute('class', 'tab')
-      tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab pt-3 px-3')
-      tab1.firstChild.setAttribute('class', '')
-      tab2.firstChild.setAttribute('class', '')
-      tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', 'text-success')
-      this.page = 4
-    },
+  mounted () {
+    $(document).ready( function() {
+
+      function animMeter(){
+        $(".meter > span").each(function() {
+          $(this)
+            .data("origWidth", $(this).width())
+            .width(0)
+            .animate({
+              width: $(this).data("origWidth")
+            }, 1200);
+        });
+      }
+      animMeter();
+
+      $('#tab-container').easytabs({
+        animate			: true,
+        updateHash		: true,
+        transitionIn	: 'slideDown',
+        transitionOut	: 'slideUp',
+        animationSpeed	: 800,
+        tabActiveClass	: 'active'}).bind('easytabs:midTransition', function(event, $clicked, $targetPanel){
+          if($targetPanel.selector=='#resume'){
+            animMeter();
+          }
+        });
+    });
+
   },
 }
 </script>
@@ -649,7 +635,6 @@ body {
 .etabs {
   margin: 0;
   padding: 0px;
-  padding-top: 5px;
   text-align: center;
 }
 
@@ -676,7 +661,6 @@ body {
   -moz-border-radius: 4px 4px 0 0;
   -webkit-border-radius: 4px 4px 0 0;
   margin-right: 10px;
-  cursor: pointer;
 }
 
 .tab a {
@@ -707,7 +691,7 @@ body {
   color: #2E8B57;
 }
 
-.tab span {
+.tab a i {
   font-size: 16px;
   margin-right: 0px;
 }
@@ -1329,16 +1313,16 @@ Change widths as necessary
     display: inline;
   }
 
-  .tab span {
+  .tab a i {
     font-size: 16px;
     margin-right: 6px;
   }
 
-  .tab span {
+  .tab a {
     padding: 10px 40px 10px 40px;
   }
 
-  .tab span.active {
+  .tab a.active {
     padding-top: 20px;
   }
 
@@ -1451,9 +1435,4 @@ tbody {
   vertical-align: middle;
   display: grid;
 }
-
-.tab-container {
-}
-
-
 </style>

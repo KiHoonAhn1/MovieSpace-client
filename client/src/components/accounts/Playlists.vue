@@ -1,155 +1,92 @@
 <template>
-  <div class="main-container text-dark">
-    <div class="main wrapper clearfix">
-      <div id="tab-container" class="tab-container">
-        <!-- Tab List -->
-        <ul class='etabs'>
-          <li class='tab' id="page1" @click="page1">
-            <span>
-              내 정보
-            </span>
-          </li>
-
-          <li class='tab' id="page2" @click="page2">
-            <span>
-              플레이리스트
-            </span>
-          </li>
-
-          <li class='tab' id="page3" @click="page3">
-            <span>
-              게시물/댓글
-            </span>
-          </li>
-
-          <li class='tab' id="page4" @click="page4">
-            <span>
-              정보 수정
-            </span>
-          </li>
-        </ul>
-
-        <!-- End Tab List -->
-        <!-- ----------------------------------------------------------------------------------- -->
-        <!-- Code for differents Tabs strat from here. -->
-        <div id="tab-data-wrap">
-          <!-- About Tab Data -->
-          <div v-if="this.page===1">
-            <AboutMe @getPage3="getPage3"/>
+  <div>
+    <div id="portfolio">
+      <section class="clearfix">
+        <div class="project-section">
+          <div class="project-container">
+            <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
+              <img src="@/assets/img.jpg" alt="project image">
+            </div>
+            <p class="project-title">Project Title</p>
           </div>
-          <!-- End About Tab Data -->
-          <!-- ----------------------------------------------------------------------------------- -->
-          <!-- skills Tab Data -->
-          <div v-if="this.page===2">
-            <Playlists />
+          <div class="project-container">
+            <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
+              <img src="@/assets/img.jpg" alt="project image">
+            </div>
+            <p class="project-title">Project Title</p>
           </div>
-          <!-- End skills Tab Data -->
-          <!-- ----------------------------------------------------------------------------------- -->
-          <!-- Projects Tab Data -->
-          <div v-if="this.page===3">
-            <Posts />
+          <div class="project-container">
+            <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
+              <img src="@/assets/img.jpg" alt="project image">
+            </div>
+            <p class="project-title">Project Title</p>
           </div>
-          <!-- End Projects tab -->
-          <!-- ----------------------------------------------------------------------------------- -->
-          <!-- Contact Tab Data -->
-          <div v-if="this.page===4">
-            <ProfileUpdate />
+          <div class="project-container">
+            <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
+              <img src="@/assets/img.jpg" alt="project image">
+            </div>
+            <p class="project-title">Project Title</p>
           </div>
-          <!-- End Contact Data -->
-          <!-- ----------------------------------------------------------------------------------- -->
+          <div class="project-container">
+            <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
+              <img src="@/assets/img.jpg" alt="project image">
+            </div>
+            <p class="project-title">Project Title</p>
+          </div>
+          <div class="project-container">
+            <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
+              <img src="@/assets/img.jpg" alt="project image">
+            </div>
+            <p class="project-title">Project Title</p>
+          </div>
+          <div class="project-container">
+            <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
+              <img src="@/assets/img.jpg" alt="project image">
+            </div>
+            <p class="project-title">Project Title</p>
+          </div>
+          <div class="project-container">
+            <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
+              <img src="@/assets/img.jpg" alt="project image">
+            </div>
+            <p class="project-title">Project Title</p>
+          </div>
+          <div class="project-container">
+            <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
+              <img src="@/assets/img.jpg" alt="project image">
+            </div>
+            <p class="project-title">Project Title</p>
+          </div>
         </div>
-      </div>
+        <div id="modal-wrapper" class="modal">
+
+          <form class="modal-content animate">
+
+            <div class="imgcontainer">
+              <span onclick="document.getElementById('modal-wrapper').style.display='none'" class="close" title="Close PopUp">&times;</span>
+              <img src="@/assets/rocket.jpg" alt="project" class="avatar">
+              <h1 class="project_details" style="text-align:center">Project Details</h1>
+            </div>
+
+            <div class="container">
+              <input type="text" placeholder="Project Name" name="uname" readonly>
+              <textarea class="project_description" rows="3" placeholder="Project Description" readonly></textarea>
+              <input type="url" placeholder="Project Link" readonly>
+              <input type="text" placeholder="Languages used" readonly>
+              <button class="project_submit" type="submit">Submit</button>
+            </div>
+
+          </form>
+
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script>
-import AboutMe from '@/components/accounts/AboutMe.vue'
-import Playlists from '@/components/accounts/Playlists.vue'
-import Posts from '@/components/accounts/Posts.vue'
-import ProfileUpdate from '@/components/accounts/ProfileUpdate.vue'
-
 export default {
-  name: 'Profile',
-  components: {
-    AboutMe,
-    Playlists,
-    Posts,
-    ProfileUpdate,
-  },
-  data: function () {
-    return {
-      page: 1,
-    }
-  },
-  mounted: function () {
-    this.page1()
-  },
-  methods: {
-    getPage3: function () {
-      this.page3()
-    },
-    page1: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab pt-3 px-3')
-      tab2.setAttribute('class', 'tab')
-      tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab')
-      tab1.firstChild.setAttribute('class', 'text-success')
-      tab2.firstChild.setAttribute('class', '')
-      tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', '')
-      this.page = 1
-    },
-    page2: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab')
-      tab2.setAttribute('class', 'tab pt-3 px-3')
-      tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab')
-      tab1.firstChild.setAttribute('class', '')
-      tab2.firstChild.setAttribute('class', 'text-success')
-      tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', '')
-      this.page = 2
-    },
-    page3: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab')
-      tab2.setAttribute('class', 'tab')
-      tab3.setAttribute('class', 'tab pt-3 px-3')
-      tab4.setAttribute('class', 'tab')
-      tab1.firstChild.setAttribute('class', '')
-      tab2.firstChild.setAttribute('class', '')
-      tab3.firstChild.setAttribute('class', 'text-success')
-      tab4.firstChild.setAttribute('class', '')
-      this.page = 3
-    },
-    page4: function () {
-      const tab1 = document.querySelector('#page1')
-      const tab2 = document.querySelector('#page2')
-      const tab3 = document.querySelector('#page3')
-      const tab4 = document.querySelector('#page4')
-      tab1.setAttribute('class', 'tab')
-      tab2.setAttribute('class', 'tab')
-      tab3.setAttribute('class', 'tab')
-      tab4.setAttribute('class', 'tab pt-3 px-3')
-      tab1.firstChild.setAttribute('class', '')
-      tab2.firstChild.setAttribute('class', '')
-      tab3.firstChild.setAttribute('class', '')
-      tab4.firstChild.setAttribute('class', 'text-success')
-      this.page = 4
-    },
-  },
+  name: 'Playlists'
 }
 </script>
 
@@ -649,7 +586,6 @@ body {
 .etabs {
   margin: 0;
   padding: 0px;
-  padding-top: 5px;
   text-align: center;
 }
 
@@ -676,7 +612,6 @@ body {
   -moz-border-radius: 4px 4px 0 0;
   -webkit-border-radius: 4px 4px 0 0;
   margin-right: 10px;
-  cursor: pointer;
 }
 
 .tab a {
@@ -707,7 +642,7 @@ body {
   color: #2E8B57;
 }
 
-.tab span {
+.tab a i {
   font-size: 16px;
   margin-right: 0px;
 }
@@ -1329,16 +1264,16 @@ Change widths as necessary
     display: inline;
   }
 
-  .tab span {
+  .tab a i {
     font-size: 16px;
     margin-right: 6px;
   }
 
-  .tab span {
+  .tab a {
     padding: 10px 40px 10px 40px;
   }
 
-  .tab span.active {
+  .tab a.active {
     padding-top: 20px;
   }
 
@@ -1451,9 +1386,4 @@ tbody {
   vertical-align: middle;
   display: grid;
 }
-
-.tab-container {
-}
-
-
 </style>

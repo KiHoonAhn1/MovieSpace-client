@@ -10,15 +10,15 @@
     :width="360"
     :height="540"
     :display="11"
-    :clickable="true"
+    :clickable="false"
     :draggable="true"
     :loop="false"
     :border="0"
     :animationSpeed="300"
     style="background:transparent;">
       <slide v-for="(movie, idx) in movies" :key="idx" :index="idx">
-        <figure style="height:100%">
-          <img :src="getImage(movie.poster_path)" style="height:100%">
+        <figure style="height:100%; cursor:pointer;" @click="getMovie(movie)">
+          <img :src="getImage(movie.poster_path)" style="height:100%;">
         </figure>
       </slide>
     </carousel-3d>
@@ -28,8 +28,9 @@
     <h1>Genre</h1>
     <carousel-3d
     :disable3d="true" 
-    :space="310" 
-    :clickable="true" 
+    :space="310"
+    :clickable="false" 
+    :draggable="true"
     :controls-visible="true" 
     :display="10"
     :border="0"
