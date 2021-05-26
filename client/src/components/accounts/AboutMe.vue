@@ -31,11 +31,13 @@
             <li>
               <span class="me-3">팔로잉</span>
               <a style="font-weight:bold; font-size:20px; cursor:pointer;">
+                11
               </a>
             </li>
             <li>
               <span class="me-3">팔로워</span>
               <a style="font-weight:bold; font-size:20px; cursor:pointer;">
+                5
               </a>
             </li>
             <li>

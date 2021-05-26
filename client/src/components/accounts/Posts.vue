@@ -6,39 +6,46 @@
           <h3>
             게시물
           </h3>
-          <div class="text-secondary text-end me-1 mb-2">더 보기</div>
+            <small>
+              16개의 게시물이 있습니다
+            </small>
+          <div class="text-secondary text-end me-1 mb-2">
+            <a href="#">
+              더 보기
+            </a>
+          </div>
           <div class="meter emerald">
             <span style="width: 100%">
               <span>
-                Language 1
+                {{ articles[0].title }}
               </span>
             </span>
           </div>
           <div class="meter emerald">
             <span style="width: 90%">
               <span>
-                Language 2
+                {{ articles[1].title }}
               </span>
             </span>
           </div>
           <div class="meter emerald">
             <span style="width: 70%">
               <span>
-                Language 3
+                {{ articles[2].title }}
               </span>
             </span>
           </div>
           <div class="meter emerald">
             <span style="width: 65%">
               <span>
-                Language 4
+                {{ articles[3].title }}
               </span>
             </span>
           </div>
           <div class="meter emerald">
             <span style="width: 85%">
               <span>
-                Language 5
+                {{ articles[4].title }}
               </span>
             </span>
           </div>
@@ -48,39 +55,46 @@
           <h3>
             댓글
           </h3>
-          <div class="text-secondary text-end me-1 mb-2">더 보기</div>
+          <small>
+            16개의 게시물이 있습니다
+          </small>
+          <div class="text-secondary text-end me-1 mb-2">
+            <a href="#">
+              더 보기
+            </a>
+          </div>
           <div class="meter emerald">
             <span style="width: 70%">
               <span>
-                skill 1
+                {{ comments[0].content }}
               </span>
             </span>
           </div>
           <div class="meter emerald">
             <span style="width: 85%">
               <span>
-                skill 2
+                {{ comments[1].content }}
               </span>
             </span>
           </div>
           <div class="meter emerald">
             <span style="width: 80%">
               <span>
-                skill 3
+                {{ comments[2].content }}
               </span>
             </span>
           </div>
           <div class="meter emerald">
             <span style="width: 90%">
               <span>
-                skill 4
+                {{ comments[3].content }}
               </span>
             </span>
           </div>
           <div class="meter emerald">
             <span style="width: 65%">
               <span>
-                skill 5
+                {{ comments[4].content }}
               </span>
             </span>
           </div>

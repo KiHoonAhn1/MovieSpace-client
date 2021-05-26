@@ -9,30 +9,28 @@
           <div class="text-center">
             <button>이미지 변경</button>
           </div>
-          ㅎㅇㅎㅇ
           <br>
           
         </div>
         <div class="g2 text-start mt-4">
             <div class="container">
-              <label for="my_id" class="ms-4 mb-0 fs-4 fw-bold">ID</label>
-              <input type="text" placeholder="아이디를 입력해주세요" name="my_id" class="mb-3" v-model="credentials.username" readonly>
-              <label for="my_pwd" class="ms-4 mb-0 fs-4 fw-bold">PASSWORD</label>
-              <input type="text" placeholder="비밀번호를 입력해주세요" name="my_pwd" class="mb-3" v-model="credentials.password">
-              <label for="my_name" class="ms-4 mb-0 fs-4 fw-bold">NAME</label>
-              <input type="text" placeholder="이름을 입력해주세요" name="my_name" class="mb-3" v-model="credentials.last_name">
-              <label for="my_email" class="ms-4 mb-0 fs-4 fw-bold">EMAIL</label>
-              <input type="text" placeholder="이메일 혹은 github 주소를 입력해주세요" name="my_email" class="mb-3" v-model="credentials.email">
-              <label for="my_email" class="ms-4 mb-0 fs-4 fw-bold">INTRODUCTION</label>
-              <textarea class="project_description mb-3" rows="3" placeholder="인사말을 입력해주세요" v-model="credentials.introduction"></textarea>
-              <label for="my_email" class="ms-4 mb-0 fs-4 fw-bold">BIRTH</label>
+              <label for="my_id">ID</label>
+              <input type="text" placeholder="아이디를 입력해주세요" name="my_id" v-model="credentials.username" readonly>
+              <label for="my_pwd">PASSWORD</label>
+              <input type="text" placeholder="비밀번호를 입력해주세요" name="my_pwd" v-model="credentials.password">
+              <label for="my_name">NAME</label>
+              <input type="text" placeholder="이름을 입력해주세요" name="my_name" v-model="credentials.last_name">
+              <label for="my_email">EMAIL</label>
+              <input type="text" placeholder="이메일 혹은 github 주소를 입력해주세요" name="my_email" v-model="credentials.email">
+              <label for="my_email">INTRODUCTION</label>
+              <textarea class="project_description" rows="3" placeholder="인사말을 입력해주세요" v-model="credentials.introduction"></textarea>
+              <label for="my_email">BIRTH</label>
               <b-form-datepicker id="example-datepicker" style="width:85%" v-model="credentials.birth" class="ms-4 mb-2" ></b-form-datepicker>
               <button class="project_submit" type="submit">Submit</button>
               <button class="project_submit project_cancel" type="submit" @click="goPage4">Cancel</button>
             </div>
         </div>
         <div class="g1">
-          hi
         </div>
         <div class="break"></div>
       </section>
@@ -56,6 +54,15 @@ export default {
         birth: '',
       }
     }
+  },
+  mounted: function () {
+    this.credentials.image = this.user.image
+    this.credentials.username = this.user.username
+    this.credentials.password = this.user.password
+    this.credentials.last_name = this.user.last_name
+    this.credentials.email = this.user.email
+    this.credentials.introduction = this.user.introduction
+    this.credentials.birth = this.user.birth
   },
   methods: {
     goPage4: function () {
@@ -1375,5 +1382,20 @@ tbody {
   display: table-row-group;
   vertical-align: middle;
   display: grid;
+}
+
+.container > label {
+  margin-left: 24px;
+  margin-bottom: 0px;
+  font-weight: bold;
+  font-size: 24px;
+  display: block;
+}
+
+.container > input,
+.container > textarea {
+  margin-bottom: 16px;
+  margin-left: 24px;
+  font-size: 20px;
 }
 </style>

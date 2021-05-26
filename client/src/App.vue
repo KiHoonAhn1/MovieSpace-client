@@ -38,8 +38,8 @@
               </ul>
             </li>
           </ul>
-          <form id="search-content" class="nav-item">
-            <input type="text" name="input" class="search-input" id="search-input">
+          <form id="search-content" class="nav-item" onsubmit="return false">
+            <input v-model="search" type="text" name="input" class="search-input" id="search-input" @keyup.enter="searchMovie">
             <button type="reset" class="search" id="search-btn"></button>
           </form>
           <!-- mouseover style을 줘야 한다. -->
@@ -89,6 +89,7 @@ export default {
     return {
       isLogin: false,
       username: 'user',
+      search: '',
     }
   },
   created: function () {
@@ -145,6 +146,25 @@ export default {
       this.$router.push({ name: 'Profile' }).catch(() => {
         this.$router.go(this.$router.currentPage)
       })
+    },
+    searchMovie: function () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8000/movies/${this.search}/search`,
+        data: this.search,
+        headers: this.setToken()
+      })
+        .then(res => {
+          this.$store.dispatch('getMovie', res.data)
+          return res
+        })
+        .then(res => {
+          this.$router.push({ name:'MovieDetail' })
+          return res
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     /* 이곳에 methods로 검색 기능 넣어줘야 함 */
   },

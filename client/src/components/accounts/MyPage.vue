@@ -3,36 +3,28 @@
     <div id="contact">
       <section class="clearfix">
         <div class="g1 mt-4 text-start">
+          <input type="text" class="ms-0 ps-0 pe-5 border-0 w-70 fs-5 fw-bolder text-center" placeholder="아이디를 입력해주세요" name="my_username" :value="credentials.username" readonly>
           <div class="photo">
             <img src="@/assets/img.jpg" alt="" class="">
           </div>
-          <div class="text-center">
-            <button>이미지 변경</button>
-          </div>
-          ㅎㅇㅎㅇ
           <br>
           
         </div>
         <div class="g2 text-start mt-4">
           <div class="container">
-            <label for="my_id" class="ms-4 mb-0 fs-4 fw-bold">ID</label>
-            <input type="text" placeholder="아이디를 입력해주세요" name="my_id" class="mb-3" v-model="credentials.username" readonly>
-            <label for="my_pwd" class="ms-4 mb-0 fs-4 fw-bold">PASSWORD</label>
-            <input type="text" placeholder="비밀번호를 입력해주세요" name="my_pwd" class="mb-3" v-model="credentials.password">
-            <label for="my_name" class="ms-4 mb-0 fs-4 fw-bold">NAME</label>
-            <input type="text" placeholder="이름을 입력해주세요" name="my_name" class="mb-3" v-model="credentials.last_name">
-            <label for="my_email" class="ms-4 mb-0 fs-4 fw-bold">EMAIL</label>
-            <input type="text" placeholder="이메일 혹은 github 주소를 입력해주세요" name="my_email" class="mb-3" v-model="credentials.email">
-            <label for="my_email" class="ms-4 mb-0 fs-4 fw-bold">INTRODUCTION</label>
-            <textarea class="project_description mb-3" rows="3" placeholder="인사말을 입력해주세요" v-model="credentials.introduction"></textarea>
-            <label for="my_email" class="ms-4 mb-0 fs-4 fw-bold">BIRTH</label>
-            <b-form-datepicker id="example-datepicker" style="width:85%" v-model="credentials.birth" class="ms-4 mb-2" ></b-form-datepicker>
+            <label for="my_name">NAME</label>
+            <input type="text" placeholder="이름을 입력해주세요" name="my_name" class="border-0" :value="credentials.last_name" readonly>
+            <label for="my_email">EMAIL</label>
+            <input type="text" placeholder="이메일이 없습니다" name="my_email" class="border-0" :value="credentials.email" readonly>
+            <label for="my_email">INTRODUCTION</label>
+            <textarea class="project_description" rows="2" placeholder="소개가 없습니다" :value="credentials.introduction" readonly></textarea>
+            <label for="my_email">BIRTH</label>
+            <b-form-datepicker id="example-datepicker" style="width:85%" class="ms-4 mb-2" :value="credentials.birth" :disabled="true"></b-form-datepicker>
             <button class="project_submit" type="submit" @click="goPage5">Update</button>
-            <button class="project_submit project_cancel" type="submit">Delete</button>
+            <button class="project_submit project_cancel" type="button" @click="deleteUser">Delete</button>
           </div>
         </div>
         <div class="g1">
-          hi
         </div>
         <div class="break"></div>
       </section>
@@ -48,18 +40,47 @@ export default {
     return {
       credentials: {
         image: '',
-        id: '',
+        username: '',
         password: '',
-        name: '',
+        last_name: '',
         email: '',
         introduction: '',
         birth: '',
       }
     }
   },
+  mounted: function () {
+    this.credentials.image = this.user.image
+    this.credentials.username = this.user.username
+    this.credentials.password = this.user.password
+    this.credentials.last_name = this.user.last_name
+    this.credentials.email = this.user.email
+    this.credentials.introduction = this.user.introduction
+    this.credentials.birth = this.user.birth
+  },
   methods: {
     goPage5: function () {
       this.$emit("goPage5")
+    },
+    deleteUser: function () {
+      let like = confirm('정말 탈퇴하시겠습니까?')
+      console.log(like)
+      // if (like) {
+      //   if (this.article.username === this.user.username) {
+      //     axios({
+      //       method: 'delete',
+      //       url: `http://127.0.0.1:8000/community/${this.article.id}/`,
+      //       data: '',
+      //       headers: this.setToken(),
+      //     })
+      //       .then(res => {
+      //         console.log(res)
+      //         this.$router.push({ name: 'ArticleList' })
+      //       })
+      //   } else {
+      //     alert('작성자만 삭제 가능합니다.')
+      //   }
+      // }
     },
   },
   computed: {
@@ -1375,5 +1396,21 @@ tbody {
   display: table-row-group;
   vertical-align: middle;
   display: grid;
+}
+
+.container > label {
+  margin-left: 24px;
+  margin-bottom: 0px;
+  font-weight: bold;
+  font-size: 24px;
+  display: block;
+}
+
+.container > input,
+.container > textarea {
+  margin-bottom: 16px;
+  margin-left: 8px;
+  border: none;
+  font-size: 20px;
 }
 </style>

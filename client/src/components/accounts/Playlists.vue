@@ -5,57 +5,33 @@
         <div class="project-section">
           <div class="project-container">
             <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
-              <img src="@/assets/img.jpg" alt="project image">
+              <img :src="'https://image.tmdb.org/t/p/w500' + movies[20].poster_path" alt="project image">
             </div>
-            <p class="project-title">Project Title</p>
+            <p class="project-title text-dark">내 플레이리스트1</p>
           </div>
           <div class="project-container">
             <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
-              <img src="@/assets/img.jpg" alt="project image">
+              <img :src="'https://image.tmdb.org/t/p/w500' + movies[3].poster_path" alt="project image">
             </div>
-            <p class="project-title">Project Title</p>
+            <p class="project-title text-dark">마블 모음</p>
           </div>
           <div class="project-container">
             <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
-              <img src="@/assets/img.jpg" alt="project image">
+              <img :src="'https://image.tmdb.org/t/p/w500' + movies[49].poster_path" alt="project image">
             </div>
-            <p class="project-title">Project Title</p>
+            <p class="project-title text-dark">한국 영화</p>
           </div>
           <div class="project-container">
             <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
-              <img src="@/assets/img.jpg" alt="project image">
+              <img :src="'https://image.tmdb.org/t/p/w500' + movies[12].poster_path" alt="project image">
             </div>
-            <p class="project-title">Project Title</p>
+            <p class="project-title text-dark">다시 볼 영화</p>
           </div>
           <div class="project-container">
             <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
-              <img src="@/assets/img.jpg" alt="project image">
+              <img :src="'https://image.tmdb.org/t/p/w500' + movies[32].poster_path" alt="project image">
             </div>
-            <p class="project-title">Project Title</p>
-          </div>
-          <div class="project-container">
-            <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
-              <img src="@/assets/img.jpg" alt="project image">
-            </div>
-            <p class="project-title">Project Title</p>
-          </div>
-          <div class="project-container">
-            <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
-              <img src="@/assets/img.jpg" alt="project image">
-            </div>
-            <p class="project-title">Project Title</p>
-          </div>
-          <div class="project-container">
-            <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
-              <img src="@/assets/img.jpg" alt="project image">
-            </div>
-            <p class="project-title">Project Title</p>
-          </div>
-          <div class="project-container">
-            <div class="project-img-container" onclick="document.getElementById('modal-wrapper').style.display='block'">
-              <img src="@/assets/img.jpg" alt="project image">
-            </div>
-            <p class="project-title">Project Title</p>
+            <p class="project-title text-dark">공포 영화</p>
           </div>
         </div>
         <div id="modal-wrapper" class="modal">
@@ -85,8 +61,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  name: 'Playlists'
+  name: 'Playlists',
+  computed: {
+    ...mapState([
+      'movies',
+    ]),
+  },
 }
 </script>
 
