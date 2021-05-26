@@ -1,13 +1,22 @@
 <template>
   <div class="text-white">
-    <h5>좋아하는 장르 기반 추천</h5>
+    <div class="mt-5">
+      <h2 class="m-5">랜덤 추천</h2>
+      <RandomMovie
+      :pickmovies="this.pickmovies"
+      />
+    </div>
+    <div class="m-5">
+      <h2>내가 좋아한 장르</h2>
+      <p>{{ this.likegenresList }}</p>
+    </div>
+    <!-- <RandomMovie /> -->
+    <!-- <h5>좋아하는 장르 기반 추천</h5> -->
+
     <!-- 아래는 유저가 좋아하는 장르 입력해서 넣는 부분 -->
-    <input type="text" v-model.trim="genre">
+    <!-- <input type="text" v-model.trim="genre">
     <button @click="insertRecommend">+</button>
-    장르 리스트 보여주고 삭제할 수 있는 부분 추가해야할듯
-
-
-
+    장르 리스트 보여주고 삭제할 수 있는 부분 추가해야할듯 -->
   </div>
   <!-- 적혀있던 코드 일단 주석처리해놓음 -->
   <!-- <div class="text-white">
@@ -22,25 +31,33 @@
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-import axios from 'axios'
+import RandomMovie from '@/components/movies/RandomMovie.vue'
+// import axios from 'axios'
 import { mapState } from 'vuex'
+import _ from 'lodash'
 // 적혀있던 코드 일단 주석처리해놓음
 // import { mapState } from 'vuex'
 // import { Carousel3d, Slide } from 'vue-carousel-3d'
 export default {
-  name: 'Recommendation',
+  name: 'MovieList',
+  components: {
+    RandomMovie,
+  },
   data: function() {
     return {
-      genre: null,
+      pickmovies: [],
+      likegenres: '',
+      likegenresList: [],
     }
   },
-  created: {
-    // 여기에 나중에 this.getRecommend() 추가하기
+  created: function() {
+    this.pickMovie()
+    this.likeGenre()
   },
   computed: {
     ...mapState ([
+      'movies',
       'user',
-      'genres',
     ])
   },
   methods: {
@@ -51,37 +68,44 @@ export default {
       }
       return config
     },
-    // 1. 좋아하는 장르 기반 추천 가져오는 부분
-    // getRecommend : function () {
-    //   pass
-    // },
-
-    // 2. 유저가 좋아하는 장르 넣어주는 함수
-    insertRecommend: function () {
-
-      // input의 장르 이름을 genreId로 바꿔줌
-      
-      // const genreId = this.genres.filter((ge)=>{
-      //   return this.genre.includes(ge.name)
-      // })
-      // console.log(genreId)
-      // console.log(genreId)
-      // const genreItem = {
-      //   id: genreId[0].id,
-      //   name: genreId[0].name,
-      // }
+    // 랜덤 영화 뽑기
+    pickMovie: function () {
+      this.pickmovies = _.sampleSize(this.movies, 10)
+    },
+    // 좋아하는 장르 기반 뽑기
+    likeGenre: function () {
       axios({
         method: 'get',
-        url: `http://127.0.0.1:8000/accounts/${this.user.id}/like_genre/`,
+        url: `http://127.0.0.1:8000/accounts/${this.user.username}/recommend/`,
         data: {},
         headers: this.setToken()
       })
       .then((res)=>{
-        console.log(res)
+        console.log(res.data)
+        
       })
     }
+  }
+  // created: {
+  //   // 여기에 나중에 this.getRecommend() 추가하기
+  // },
+  // computed: {
+  //   ...mapState ([
+  //     'user',
+  //     'genres',
+  //   ])
+  // },
+  // methods: {
+  //   setToken: function () {
+  //     const token = localStorage.getItem('jwt')
+  //     const config = {
+  //       Authorization: `JWT ${token}`
+  //     }
+  //     return config
+  //   },
+    
 
-  },
+  // },
   // 적혀있던 코드 일단 주석처리 해놓음
   // name: 'MovieList',
   //   components: {
