@@ -3,7 +3,11 @@
     <h3>상세 페이지</h3>
     <hr>
 		<div class="row text-start text-secondary">
-			<h5 class="col-8">작성자 : {{ article.username }}</h5>
+			<h5 class="col-8">작성자 : 
+				<span style="cursor:pointer;" @click="getProfile">
+					{{ article.username }}
+				</span>
+			</h5>
 			<h5 class="col">작성일자 : {{ article.created_at }}</h5>
 		</div>
 		<hr>
@@ -34,6 +38,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'ArticleDetailCard',
@@ -43,7 +48,35 @@ export default {
       'movies',
       'user'
     ])
-  }
+  },
+	methods: {
+		setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+		getProfile: function () {
+			axios({
+				method: 'get',
+        url: `http://127.0.0.1:8000/accounts/${this.article.username}`,
+        data: {},
+        headers: this.setToken()
+			})
+				.then(res => {
+					this.$store.dispatch('getAnotherUser', res.data)
+					return res.data
+				})
+				.then(res => {
+					this.$router.push({ name: 'Profile' })
+					return res
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		}
+	}
 }
 </script>
 
@@ -126,5 +159,9 @@ export default {
 		font-size: 0.8rem;
 		font-weight: 700;
 		margin: 0 0 0.4875rem 0;
+	}
+	h5 span:hover {
+		color: skyblue;
+		text-decoration: underline;
 	}
 </style>

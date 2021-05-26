@@ -4,20 +4,20 @@
     <section class="clearfix">
       <div class="g2">
         <div class="photo">
-          <img :src="user.image" alt="Your alt text" v-if="user.image">
+          <img :src="anotherUser.image" alt="Your alt text" v-if="anotherUser.image">
           <img src="@/assets/img.jpg" alt="" v-else>
         </div>
         <div class="info">
           <h2 class="d-inline">
             <p></p>
-            {{ user.username }}
+            {{ anotherUser.username }}
           </h2>
-          <button class="d-inline ms-4 btn-sm" style="vertical-align:text-bottom">팔로우</button>
+          <button class="d-inline ms-4 btn-sm" style="vertical-align:text-bottom" @click="follow" v-if="anotherUser.username != user.username">팔로우</button>
           <h4>
             Your work tag
           </h4>
-          <p class="text-dark" v-if="user.description">
-            {{ user.description }}
+          <p class="text-dark" v-if="anotherUser.description">
+            {{ anotherUser.description }}
           </p>
           <p class="text-dark" v-else>
             인사말을 등록해주세요.
@@ -29,13 +29,13 @@
         <div class="main-links sidebar">
           <ul>
             <li>
-              <a href="#">
-                팔로잉
+              <span class="me-3">팔로잉</span>
+              <a style="font-weight:bold; font-size:20px; cursor:pointer;">
               </a>
             </li>
             <li>
-              <a href="#">
-                팔로워
+              <span class="me-3">팔로워</span>
+              <a style="font-weight:bold; font-size:20px; cursor:pointer;">
               </a>
             </li>
             <li>
@@ -55,9 +55,11 @@
             <i class="icon-envelope"></i>
             <div class="item-data">
               <h3>
-                <!-- 여기를 모달로 바꾸자! -->
-                <a href="#" onclick="document.getElementById('modal-wrapper').style.display='block'">
+                <a href="#" class="ms-0" onclick="document.getElementById('modal-wrapper').style.display='block'" v-if="anotherUser.username === user.username">
                   좋아하는 장르 선택하기
+                </a>
+                <a class="ms-0" v-else>
+                  좋아하는 장르
                 </a>
                 <!-- modal start -->
                 <div id="modal-wrapper" class="modal">
@@ -67,14 +69,14 @@
                       <img src="@/assets/rocket.jpg" alt="project" class="avatar">
                       <h1 class="project_details" style="text-align:center">Select Genres</h1>
                     </div>
-                    <div class="container">
+                    <div class="container text-center">
                       <span v-for="(genre, idx) in genres" :key="idx" class="m-1 d-inline">
-                        <input type="checkbox" placeholder="Project Name" name="uname" class="" v-model="checkGenres" :value="genre">
+                        <input type="checkbox" placeholder="Project Name" name="uname" class="" v-model="checkGenres" :value="genre.id">
                         <label for="uname">{{ genre.name }}</label>
                         <br v-if="(idx+1)%5 === 0 & idx != 0">
                       </span>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" style="background-color:#2E74FA" @click="selectGenres">확인</button>
+                        <button type="button" class="btn btn-primary" style="background-color:#2E74FA" onclick="document.getElementById('modal-wrapper').style.display='none'" @click="selectGenres">확인</button>
                         <button type="button" class="btn btn-secondary" onclick="document.getElementById('modal-wrapper').style.display='none'" ss="modal-wrapper">Close</button>
                       </div>
                       <!-- <button class="project_submit" type="submit">Submit</button> -->
@@ -83,7 +85,7 @@
                 </div>
                 <!-- modal end -->
               </h3>
-              <p v-if="user.genres">
+              <p v-if="myGenres" class="pe-5 mt-2">
                 {{ myGenres }}
               </p>
               <p v-else>
@@ -97,12 +99,13 @@
             <i class="icon-facebook"></i>
             <div class="item-data">
               <h3>
-                <a href="http://fb.me/your-Username">
-                  Add Facebook Link
+                <img src="@/assets/cake.jpg" class="m-0" style="width:20px; border-radius:10px;">
+                <a href="#">
+                  {{ anotherUser.birth }}
                 </a>
               </h3>
               <p>
-                Facebook Profile
+                오늘은? {{ date }}
               </p>
             </div>
           </div>
@@ -112,10 +115,10 @@
             <i class="icon-twitter"></i>
             <div class="item-data">
               <h3>
-                <a href="#" v-if="user.email">
+                <a href="#" v-if="anotherUser.email">
                   깃허브
                 </a>
-                <a href="#" v-else-if="user">
+                <a href="#" v-else-if="anotherUser">
                   이메일
                 </a>
                 <a href="#" v-else>
@@ -123,7 +126,7 @@
                 </a>
               </h3>
               <p>
-                Twitter Handle
+                Git URL or Email
               </p>
             </div>
           </div>
@@ -142,15 +145,21 @@ export default {
   name: 'AboutMe',
   mounted: function () {
     this.getMyArticles()
-    console.log(this.user)
     this.getMyGenres()
-    this.myGenres = this.checkGenres.join(', ')
+    const dt = new Date().toLocaleDateString()
+    this.date = dt
+    this.followInfo()
   },
   data: function () {
     return {
       myArticles: 0,
       myGenres: [],
       checkGenres: [],
+      date: '',
+      followed: '',
+      followedUsers: [],
+      followingCount: '',
+      followedCount: '',
     }
   },
   computed: {
@@ -158,6 +167,7 @@ export default {
       'user',
       'articles',
       'genres',
+      'anotherUser',
     ])
   },
   methods: {
@@ -170,7 +180,7 @@ export default {
     },
     getMyArticles: function () {
       const myArticles = this.articles.filter(article => {
-        return article.username === this.user.username
+        return article.username === this.anotherUser.username
       })
       this.myArticles = myArticles.length
     },
@@ -181,17 +191,50 @@ export default {
       console.log('checkEmail')
     },
     selectGenres: function () {
-      console.log(this.myGenres)
-    },
-    getMyGenres: function () {
+      const checkGenres = this.checkGenres
       axios({
-        method: 'get',
-        url: `http://127.0.0.1:8000/accounts/${this.user.id}/like_genres/`,
-        data: {},
+        method: 'post',
+        url: `http://127.0.0.1:8000/accounts/${this.anotherUser.username}/like_genre/`,
+        data: checkGenres,
         headers: this.setToken(),
       })
         .then(res => {
           console.log(res)
+          this.getMyGenres()
+        })
+    },
+    getMyGenres: function () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8000/accounts/${this.anotherUser.username}/like_genre/`,
+        data: {},
+        headers: this.setToken(),
+      })
+        .then(res => {
+          this.checkGenres = res.data.like_genres
+          // this.myGenres = this.checkGenres.join(', ')
+          // const myGenres = this.checkGenres
+          let Ge = []
+          for(let i=0; i<this.genres.length; i++){
+            if (this.checkGenres.includes(this.genres[i]['id'])) {
+              Ge.push(this.genres[i]['name'])
+            }
+          }
+          this.myGenres = Ge.join(', ')
+        })
+    },
+    follow: function () {
+
+    },
+    followInfo: function () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8000/accounts/${this.anotherUser.username}/follow_info/`,
+        data: {},
+        headers: this.setToken()
+      })
+        .then(res => {
+          console.log(res.data)
         })
     }
   }

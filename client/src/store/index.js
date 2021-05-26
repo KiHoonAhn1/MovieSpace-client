@@ -12,6 +12,7 @@ export default new Vuex.Store({
     movies: [],
     movie: {},
     user: {},
+    anotherUser: {},
     articles: [],
     article: {},
     comments: [],
@@ -29,6 +30,9 @@ export default new Vuex.Store({
     },
     GET_USER: function (state, user) {
       state.user = user
+    },
+    GET_ANOTHER_USER: function (state, user) {
+      state.anotherUser = user
     },
     LOGOUT: function (state) {
       state.user = {}
@@ -51,11 +55,13 @@ export default new Vuex.Store({
       commit('GET_MOVIE', movie)
     },
     getGenres: function({commit}, genres) {
-      // console.log(genres)
       commit('GET_GENRES', genres)
     },
     getUser: function({commit}, user) {
       commit('GET_USER', user)
+    },
+    getAnotherUser: function({commit}, user) {
+      commit('GET_ANOTHER_USER', user)
     },
     logout: function ({commit}) {
       commit('LOGOUT')
