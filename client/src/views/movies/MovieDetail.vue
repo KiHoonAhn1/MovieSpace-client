@@ -171,9 +171,10 @@ export default {
       }
     })
 
-    this.getGenres()
+    
     this.getReviews()
     this.like()
+    this.getGenres()
     // this.likeMovie()
     
   },
@@ -283,7 +284,9 @@ export default {
         headers: this.setToken()
       })
       .then((res)=> {
+        console.log(this.liked)
         this.liked = res.data.liked
+        console.log(this.liked)
         this.like()
       })
       .catch((error) =>{
