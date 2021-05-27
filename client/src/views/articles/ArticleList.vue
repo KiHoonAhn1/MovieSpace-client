@@ -52,7 +52,8 @@ a {
     text-decoration: none !important; }
 
 .article-content {
-  padding: 7rem 0; }
+  padding: 7rem 0;
+  }
 
 h2 {
   font-size: 20px;
