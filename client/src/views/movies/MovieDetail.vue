@@ -203,7 +203,6 @@ export default {
   },
   created: function() {
     this.movieData = this.movie
-    this.reviewList = this.reviews
   },
   computed: {
     youtubeVideoSrc: function () {
@@ -213,7 +212,6 @@ export default {
       'user',
       'movie',
       'genres',
-      'reviews',
     ]),
     rows() {
       return this.reviewList.length
@@ -237,9 +235,6 @@ export default {
       .then((res)=> {
         this.reviewList = res.data
       })
-      // .then((res) => {
-      //   this.$store.dispatch('getReviews', res.data)
-      // })
       .catch((err) => {
         console.log(err)
       })
