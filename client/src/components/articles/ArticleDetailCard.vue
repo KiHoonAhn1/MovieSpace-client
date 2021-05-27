@@ -3,12 +3,13 @@
     <h3>상세 페이지</h3>
     <hr>
 		<div class="row text-start text-secondary">
-			<h5 class="col-8">작성자 : 
+			<h5 class="col-7">작성자 : 
 				<span style="cursor:pointer;" @click="getProfile">
 					{{ article.username }}
 				</span>
 			</h5>
-			<h5 class="col">작성일자 : {{ article.created_at }}</h5>
+			<h5 class="col text-end">작성일자 : {{ article.created_at }}</h5>
+			<h5 class="col text-end">수정일자 : {{ article.updated_at }}</h5>
 		</div>
 		<hr>
     <div class="field">

@@ -10,6 +10,7 @@ import CreateArticle from '@/views/articles/CreateArticle.vue'
 import ArticleDetail from '@/views/articles/ArticleDetail.vue'
 import ArticleUpdate from '@/views/articles/ArticleUpdate.vue'
 import Profile from '@/views/accounts/Profile.vue'
+import NewReviews from '@/views/articles/NewReviews.vue'
 
 Vue.use(VueRouter)
 
@@ -64,6 +65,11 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile,
+  },
+  {
+    path: '/newReviews',
+    name: 'NewReviews',
+    component: NewReviews,
   },
 
 ]

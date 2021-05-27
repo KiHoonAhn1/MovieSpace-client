@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto container">
+  <div class="mx-auto container mt-5">
     <div class="row justify-content-center">
       <div class="col-md-5">
         <div class="input-group tm-mb-30">
@@ -9,7 +9,10 @@
             <input name="password" type="password" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="비밀번호" v-model="credentials.password"  @keyup.enter="login(credentials)">
         </div>
         <div class="input-group justify-content-end">
-            <input type="button" class="btn btn-primary tm-btn-pad-2" value="Send" @click="login(credentials)">
+            <input type="button" class="btn btn-primary tm-btn-pad-2" value="Login" @click="login(credentials)">
+            <router-link to="/Signup" class="ms-3">
+              <input type="button" class="btn btn-primary tm-btn-pad-2" value="Sign up">
+            </router-link>
         </div>
       </div>
     </div>
@@ -19,7 +22,6 @@
 <script>
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
-
 const secretkey = 'django-insecure-y%n75jhzgb2h#p_rdwc&f6435(=fu7xg%4jmbosw7_hpwrt!h*'
 
 export default {
@@ -31,7 +33,13 @@ export default {
         password: null,
       },
       token: '',
+      date: '',
+      temp: '',
+      img: '',
     }
+  },
+  mounted: function () {
+
   },
   methods: {
     setToken: function () {
@@ -79,6 +87,7 @@ export default {
 /* Login CSS Start */
 .tm-contact-left {
     padding-right: 55px;
+    display:
 }
 
 .form-control {

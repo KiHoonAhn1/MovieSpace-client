@@ -7,45 +7,17 @@
             게시물
           </h3>
             <small>
-              16개의 게시물이 있습니다
+              {{ this.articles.length }}개의 게시물이 있습니다
             </small>
           <div class="text-secondary text-end me-1 mb-2">
             <a href="#">
               더 보기
             </a>
           </div>
-          <div class="meter emerald">
+          <div class="meter emerald" v-for="(article, idx) in articles10" :key="idx">
             <span style="width: 100%">
               <span>
-                {{ articles[0].title }}
-              </span>
-            </span>
-          </div>
-          <div class="meter emerald">
-            <span style="width: 90%">
-              <span>
-                {{ articles[1].title }}
-              </span>
-            </span>
-          </div>
-          <div class="meter emerald">
-            <span style="width: 70%">
-              <span>
-                {{ articles[2].title }}
-              </span>
-            </span>
-          </div>
-          <div class="meter emerald">
-            <span style="width: 65%">
-              <span>
-                {{ articles[3].title }}
-              </span>
-            </span>
-          </div>
-          <div class="meter emerald">
-            <span style="width: 85%">
-              <span>
-                {{ articles[4].title }}
+                {{ article.title }}
               </span>
             </span>
           </div>
@@ -56,45 +28,17 @@
             댓글
           </h3>
           <small>
-            16개의 게시물이 있습니다
+            {{ this.comments.length }}개의 댓글이 있습니다
           </small>
           <div class="text-secondary text-end me-1 mb-2">
             <a href="#">
               더 보기
             </a>
           </div>
-          <div class="meter emerald">
-            <span style="width: 70%">
+          <div class="meter emerald" v-for="(comment, idx) in comments10" :key="idx">
+            <span style="width: 100%">
               <span>
-                {{ comments[0].content }}
-              </span>
-            </span>
-          </div>
-          <div class="meter emerald">
-            <span style="width: 85%">
-              <span>
-                {{ comments[1].content }}
-              </span>
-            </span>
-          </div>
-          <div class="meter emerald">
-            <span style="width: 80%">
-              <span>
-                {{ comments[2].content }}
-              </span>
-            </span>
-          </div>
-          <div class="meter emerald">
-            <span style="width: 90%">
-              <span>
-                {{ comments[3].content }}
-              </span>
-            </span>
-          </div>
-          <div class="meter emerald">
-            <span style="width: 65%">
-              <span>
-                {{ comments[4].content }}
+                {{ comment.content }}
               </span>
             </span>
           </div>
@@ -112,7 +56,8 @@ export default {
   name: 'Posts',
   data: function () {
     return {
-
+      articles10: [],
+      comments10: [],
     }
   },
   computed: {
@@ -120,6 +65,26 @@ export default {
       'comments',
       'articles',
     ])
+  },
+  created: function () {
+    if (this.articles.length > 10) {
+      for (let i=0; i<10; i++) {
+        this.articles10.push(this.articles[i])
+      }
+    } else {
+      for (let i=0; i<this.articles.length; i++) {
+        this.articles10.push(this.articles[i])
+      }
+    }
+    if (this.comments.length > 10) {
+      for (let i=0; i<10; i++) {
+        this.comments10.push(this.comments[i])
+      }
+    } else {
+      for (let i=0; i<this.comments.length; i++) {
+        this.comments10.push(this.comments[i])
+      }
+    }
   },
   mounted () {
     $(document).ready( function() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto container">
+  <div class="mx-auto container mt-5">
     <div class="row justify-content-center">
       <div class="col-md-5">
         <div class="input-group tm-mb-30">
@@ -19,6 +19,9 @@
         </div>
         <div class="input-group justify-content-end">
           <input type="button" class="btn btn-primary tm-btn-pad-2" value="Send" @click="signup()">
+          <router-link to="Login" class="ms-3">
+            <input type="button" class="btn btn-primary tm-btn-pad-2" value="Cancel">
+          </router-link>
         </div>
       </div>
     </div>

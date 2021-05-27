@@ -19,6 +19,8 @@ export default new Vuex.Store({
     genres: [],
     bestMovies: [],
     isLogin: false,
+    weather: {},
+    reviews: [],
   },
   mutations: {
     GET_MOVIES: function (state, movies) {
@@ -67,6 +69,12 @@ export default new Vuex.Store({
       state.user.image = user.image
       state.anotherUser = state.user
     },
+    GET_WEATHER: function (state, weather) {
+      state.weather = weather
+    },
+    GET_REVIEWS: function (state, reviews) {
+      state.reviews = reviews
+    },
   },
   actions: {
     getMovies: function({commit}, movies) {
@@ -107,6 +115,12 @@ export default new Vuex.Store({
     },
     updateUser: function ({commit}, user) {
       commit('UPDATE_USER', user)
+    },
+    getWeather: function ({commit}, weather) {
+      commit('GET_WEATHER', weather)
+    },
+    getReviews: function ({commit}, reviews) {
+      commit('GET_REVIEWS', reviews)
     },
 
   },

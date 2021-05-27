@@ -12,7 +12,7 @@
             <p></p>
             {{ anotherUser.username }}
           </h2>
-          <button class="d-inline ms-4 btn-sm" id="follow-button" style="vertical-align:text-bottom" @click="follow" v-if="anotherUser.username != user.username">팔로우</button>
+          <button class="d-inline ms-4 btn-lg text-white border-0" id="follow-button" style="vertical-align:text-bottom" @click="follow" v-if="anotherUser.username != user.username">팔로우</button>
           <h4>
             {{ anotherUser.last_name }}
           </h4>
@@ -238,8 +238,10 @@ export default {
         const followBtn = document.querySelector('#follow-button')
         if (isFollowed) {
           followBtn.innerText = '언팔로우'
+          followBtn.setAttribute('style', 'vertical-align:text-bottom; background-color:#40E0D0;')
         } else {
           followBtn.innerText = '팔로우'
+          followBtn.setAttribute('style', 'vertical-align:text-bottom; background-color:#1E90FF;')
         }
         this.followInfo()
         
@@ -1588,5 +1590,9 @@ tbody {
   display: table-row-group;
   vertical-align: middle;
   display: grid;
+}
+
+.btn-lg {
+  background-color: #1E90FF;
 }
 </style>

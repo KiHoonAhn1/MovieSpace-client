@@ -6,52 +6,60 @@
       <source src="@/assets/v1.mp4" type="video/mp4">
     </video>
     <!-- 'bg-transparent'가 배경 투명하게 하는 것 -->
-    <div id="nav" class="navbar navbar-expand-lg navbar-light bg-transparent">
+    <div id="nav" class="navbar navbar-expand-lg navbar-light bg-transparent" v-if="logined()">
       <div class="container-fluid">
         <router-link to="/" class="nav-link">
-          <a class="navbar-brand" style="font-size:30px;" href="#">
+          <a class="navbar-brand" style="font-size:30px;" href="#" id="nav1">
             <img src="@/assets/rocket.jpg" alt="" style="width:30px; border-radius:15px;" class="me-1">
             Movie Space
           </a>
         </router-link>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item fs-3">
+            <li class="nav-item fs-4" id="nav2">
               <router-link to="/movielist" class="nav-link me-3">추천</router-link>
             </li>
-            <li class="nav-item dropdown fs-3">
+            <li class="nav-item dropdown fs-4" id="nav3">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 게시판
               </a>
               <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-                <li class="fs-4">
-                  <a class="dropdown-item" href="#">최근 한줄평</a>
+                <li class="fs-5">
+                  <router-link to="/newReviews" class="dropdown-item">
+                    최근 한줄평
+                  </router-link>
                 </li>
-                <li class="fs-4">
+                <li class="fs-5">
                   <router-link to="/articleList" class="dropdown-item">게시판</router-link>
                 </li>
                 <li><hr class="dropdown-divider bg-light"></li>
-                <li class="fs-4"><a class="dropdown-item" href="#">Something else here</a></li>
+                <li class="fs-5"><a class="dropdown-item" href="#" onClick="window.open('https://www.youtube.com')">Youtube</a></li>
               </ul>
+            </li>
+            <li class="nav-item fs-4" v-if="user.username === 'admin'">
+              <a href="http://127.0.0.1:8000/admin" class="nav-link ms-3">관리자</a>
             </li>
           </ul>
           <form id="search-content" class="nav-item" onsubmit="return false">
             <input v-model="search" type="text" name="input" class="search-input" id="search-input" @keyup.enter="searchMovie">
             <button type="reset" class="search" id="search-btn"></button>
           </form>
-          <!-- mouseover style을 줘야 한다. -->
+          <div class="fs-6 d-inline" style="width:150px;">
+            {{ weather.date }} 서울의 기온 {{ weather.temp }}℃
+            <img :src="getImg" alt="">
+          </div>
           <div class="nav-item navbar p-0" v-if="isLogin">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle fs-3" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <!-- <img class="me-2" :src="user.image" style="width:40px; height:40px; border-radius:20px;" v-if="user.image"> -->
-              <img class="me-2" src="@/assets/img.jpg" style="width:40px; height:40px; border-radius:20px;">
+              <img class="me-2" src="@/assets/img.jpg" style="width:60px; height:60px; border-radius:30px;">
               {{ user.username }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end bg-dark mt-4" style="font-size:20px;" aria-labelledby="navbarDropdown">
               <li @click="getAnotherUser">
-                <a class="dropdown-item fs-4" href="">내 정보</a>
+                <a class="dropdown-item fs-4" href="#">내 정보</a>
               </li>
               <li class="fs-4"><a class="dropdown-item fs-4" href="#">플레이리스트</a></li>
               <li><hr class="dropdown-divider bg-light"></li>
@@ -61,9 +69,12 @@
             </ul>
           </div>
           <span v-else class="nav-item navbar">
-            <ul class="navbar">
+            <ul class="navbar col">
               <li class="navbar-nav">
-                <router-link to="/login" class="nav-link fs-2">로그인</router-link>
+                <router-link to="/login" class="nav-link fs-2">
+                  로그인
+                  <br>
+                </router-link>
               </li>
               <li class="navbar-nav">
                 <router-link to="/signup" class="nav-link fs-2">회원가입</router-link>
@@ -92,6 +103,12 @@ export default {
     }
   },
   created: function () {
+    console.log(this.logined())
+    if (!localStorage.getItem('jwt')) {
+      this.$router.push({ name: 'Login' })
+    } else {
+      this.$store.dispatch('isLogin', true)
+    }
     axios.get(URL)
       .then(response => {
         this.$store.dispatch('getMovies', response.data)
@@ -100,11 +117,6 @@ export default {
       .catch(error => {
         console.log(error)
       })
-    // token이 있으면 로그인 처리
-    const token = localStorage.getItem('jwt')
-    if (token) {
-      this.$store.dispatch('isLogin', true)
-    }
     axios({
       method: 'get',
       url: 'http://127.0.0.1:8000/movies/genres/',
@@ -141,6 +153,41 @@ export default {
     };
     searchBtn.addEventListener("click", expand);
     this.user.image='img'
+
+    const date = new Date()
+    const date1 = date.toString()
+    const now = date1.substr(16, 2)
+    const today = date1.substr(8, 2)
+
+    axios.get('http://api.openweathermap.org/data/2.5/forecast?q=seoul&lang=ko_kr&APPID=c102a437a9d8f986c74e57cd6a2dbce1')
+      .then((res) => {
+        return res.data.list
+      })
+      .then(res => {
+        res.forEach((e) => {
+          if (e.dt_txt.toString().substr(11, 2) - now <= 3 && e.dt_txt.toString().substr(8, 2) === today) {
+            this.date = e.dt_txt
+            this.temp = Math.round(e.main.temp - 273.15)
+            this.img = e.weather[0].icon
+            // console.log(this.date)
+            // console.log(this.temp)
+          }
+        })
+        return res
+      })
+      .then(res => {
+        const weather = {
+          date: this.date,
+          temp: this.temp,
+          img: this.img
+        }
+        this.$store.dispatch('getWeather', weather)
+        return res
+      })
+      .catch(err => {
+        console.error(err);
+    });
+    
   },
   methods: {
     setToken: function () {
@@ -174,19 +221,32 @@ export default {
         })
         .then(res => {
           this.$router.push({ name:'MovieDetail' })
+          this.search = ''
           return res
         })
         .catch(err => {
+          alert('존재하지 않는 영화를 입력하셨습니다.')
           console.log(err)
         })
+    },
+    logined: function () {
+      if (localStorage.getItem('jwt')) {
+        return true
+      } else {
+        return false
+      }
     },
     /* 이곳에 methods로 검색 기능 넣어줘야 함 */
   },
   computed: {
     ...mapState ([
       'user',
-      'isLogin'
+      'isLogin',
+      'weather',
     ]),
+    getImg: function () {
+      return `http://openweathermap.org/img/w/${this.weather.img}.png`
+    }
   },
 
 }
@@ -247,12 +307,13 @@ export default {
     position: absolute;
     height: 50px;
     width: 300px;
-    margin-left: 170px;
+    /* margin-left: 170px; */
+    margin-top: 50px;
     /* top: 77%;
     right: -20%; */
-    top: 75%;
-    right: -7%;
-    transform: translate(-50%, -50%);
+    top: 10%;
+    right: 10%;
+    /* transform: translate(-50%, -50%); */
   }
 
   #search-content.on {

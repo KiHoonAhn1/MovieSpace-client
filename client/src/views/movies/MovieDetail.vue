@@ -15,7 +15,6 @@
               <i class="far fa-heart fa-3x" style="color:crimson; cursor:pointer;" size="lg" @click="likeMovie"></i>
             </div>
             
-            
           </div>
         </div>
         <!-- width="640" height="360" -->
@@ -35,7 +34,10 @@
           <!-- <h4>영화 정보</h4> -->
           <div class="d-flex">
             <i class="fas fa-heart fa-lg" style="color:crimson; cursor:pointer;"></i>
-            <div class="ms-3">{{ likedCount }}명이 이 영화를 좋아합니다.</div>
+            <div class="ms-2">{{ likedCount }}명이 이 영화를 좋아합니다.</div>
+            <div class="ms-5">
+              <i class="fas fa-plus text-success ms-5" style="cursor:pointer"></i>
+            </div>
           </div>
           
           <div class="d-flex justify-content-between mt-4" >
@@ -73,6 +75,9 @@
           <div class="input-group tm-mb-30 mx-4">
             <input name="username" type="text" class="form-control rounded-0 border-top-0 border-end-0 border-start-0" placeholder="리뷰를 남겨주세요" v-model="content" @keyup.enter="createReview" autofocus>
           </div>
+          <button class="btn btn-light" style="width:8%;" @click="createReview">
+            확인
+          </button>
         </div>
         <!-- 아래 코드 추가함 -->
         <div class="table-responsive mt-5">
@@ -234,6 +239,7 @@ export default {
       })
       .then((res)=> {
         this.reviewList = res.data
+        this.content = ''
       })
       .catch((err) => {
         console.log(err)
