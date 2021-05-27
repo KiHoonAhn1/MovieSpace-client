@@ -18,6 +18,7 @@ export default new Vuex.Store({
     comments: [],
     genres: [],
     bestMovies: [],
+    reviews: [],
   },
   mutations: {
     GET_MOVIES: function (state, movies) {
@@ -50,6 +51,9 @@ export default new Vuex.Store({
     GET_COMMENTS: function (state, comments) {
       state.comments = comments
     },
+    GET_REVIEWS: function (state, reviews) {
+      state.reviews = reviews
+    },
   },
   actions: {
     getMovies: function({commit}, movies) {
@@ -81,6 +85,9 @@ export default new Vuex.Store({
     },
     getComments: function ({commit}, comments) {
       commit('GET_COMMENTS', comments)
+    },
+    getReviews: function ({commit}, reviews) {
+      commit('GET_REVIEWS', reviews)
     },
 
   },

@@ -12,7 +12,7 @@
             <p></p>
             {{ anotherUser.username }}
           </h2>
-          <button class="d-inline ms-4 btn-sm" style="vertical-align:text-bottom" @click="follow" v-if="anotherUser.username != user.username">팔로우</button>
+          <button class="d-inline ms-4 btn-sm" id="follow-button" style="vertical-align:text-bottom" @click="follow" v-if="anotherUser.username != user.username">팔로우</button>
           <h4>
             {{ anotherUser.last_name }}
           </h4>
@@ -31,13 +31,13 @@
             <li>
               <span class="me-3">팔로잉</span>
               <a style="font-weight:bold; font-size:20px; cursor:pointer;">
-                11
+                {{ followingsCount }}
               </a>
             </li>
             <li>
               <span class="me-3">팔로워</span>
               <a style="font-weight:bold; font-size:20px; cursor:pointer;">
-                5
+                {{ followersCount }}
               </a>
             </li>
             <li>
@@ -160,8 +160,8 @@ export default {
       date: '',
       followed: '',
       followerUsers: [],
-      followingCount: '',
-      followedCount: '',
+      followingsCount: '',
+      followersCount: '',
     }
   },
   computed: {
@@ -190,7 +190,7 @@ export default {
       this.$emit("goPage3")
     },
     checkEmail: function () {
-      console.log('checkEmail')
+      // console.log('checkEmail')
     },
     selectGenres: function () {
       const checkGenres = this.checkGenres
@@ -226,7 +226,24 @@ export default {
         })
     },
     follow: function () {
-
+      axios({
+        method: 'post',
+        url: `http://127.0.0.1:8000/accounts/${this.anotherUser.username}/follow/`,
+        data: {},
+        headers: this.setToken()
+      })
+      .then(res => {
+        // console.log(res.data.isFollowed)
+        const isFollowed = res.data.isFollowed
+        const followBtn = document.querySelector('#follow-button')
+        if (isFollowed) {
+          followBtn.innerText = '언팔로우'
+        } else {
+          followBtn.innerText = '팔로우'
+        }
+        this.followInfo()
+        
+      })
     },
     followInfo: function () {
       axios({
@@ -237,15 +254,15 @@ export default {
       })
         .then(res => {
           console.log(res.data)
-          // this.followedCountCount = res.data.count
-          // this.likeUsers = res.data.movie.like_users
-          // console.log(this.likeUsers)
-          // this.liked = this.likeUsers.find((users) => {
-          //   return users === this.user.id
-          // })
-          // if (this.liked === undefined) {
-          //   this.liked = false
-          // }
+          this.followersCount = res.data.followers_count
+          this.followingsCount = res.data.followings_count
+          const followBtn = document.querySelector('#follow-button')
+          const followed = res.data.isFollowed
+          if (followed) {
+            followBtn.innerText = '언팔로우'
+          } else {
+            followBtn.innerText = '팔로우'
+          }
         })
     }
   }

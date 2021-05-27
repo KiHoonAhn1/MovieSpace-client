@@ -79,18 +79,21 @@
           <b-table 
           id="my-table"
           :items="reviewList"
-          :fields="['username','score', 'content', 'updated_at', 'etc']"
+          :fields="['score', 'content', 'username', 'updated_at', 'etc']"
           :per-page="perPage"
           :current-page="currentPage"
           class="table table-striped custom-table"
           small
           >
+            <!-- <template #cell(content)="content">
+              {{ content.item.content }}
+            </template> -->
             <template #cell(etc)="row">
               <div v-if="row.item.username === user.username">
                 <b-button size="sm" class="mr-2 me-3" @click="row.toggleDetails">
                   수정
                 </b-button>
-                <div @click="deleteComment(row.item)" class="d-inline">
+                <div @click="deleteReview(row.item)" class="d-inline">
                   <b-button size="sm" class="mr-2 btn-danger">
                     삭제
                   </b-button>
@@ -99,8 +102,9 @@
             </template>
             <template #row-details="row">
               <b-card class="text-start" style="background-color:transparent">
+                <input type="integer" :value="row.item.score" style="width:15%;">
                 <input type="text" :value="row.item.content" style="width:85%;">
-                <button @click="updateComment(row), row.toggleDetails" class="btn-secondary mx-2">확인</button>
+                <button @click="updateReview(row), row.toggleDetails" class="btn-secondary mx-2">확인</button>
                 <button @click="row.toggleDetails" class="btn-warning">취소</button>
               </b-card>
             </template>            
@@ -173,7 +177,7 @@ export default {
 
     axios.get(VIDEO_URL)
     .then(response => {
-      console.log(response)
+      // console.log(response)
       this.movieVideo = response.data.results[0].key
     })
 
@@ -199,6 +203,7 @@ export default {
   },
   created: function() {
     this.movieData = this.movie
+    this.reviewList = this.reviews
   },
   computed: {
     youtubeVideoSrc: function () {
@@ -208,6 +213,7 @@ export default {
       'user',
       'movie',
       'genres',
+      'reviews',
     ]),
     rows() {
       return this.reviewList.length
@@ -231,6 +237,9 @@ export default {
       .then((res)=> {
         this.reviewList = res.data
       })
+      // .then((res) => {
+      //   this.$store.dispatch('getReviews', res.data)
+      // })
       .catch((err) => {
         console.log(err)
       })
@@ -312,40 +321,45 @@ export default {
         console.log(error)
       })
     },
-    updateComment: function (comment) {
-      const commentHTML = document.querySelector(`#my-table__details_${comment.index}_`)
-      const content = commentHTML.firstChild.firstChild.childNodes[2].childNodes[2].value
-      const commentInfo = {
-				content: content,
-				username: comment.item.username,
+    // 리뷰 수정
+    updateReview: function (review) {
+      const reviewHTML = document.querySelector(`#my-table__details_${review.index}_`)
+      const score = reviewHTML.firstChild.firstChild.childNodes[2].childNodes[2].value
+      const content = reviewHTML.firstChild.firstChild.childNodes[2].childNodes[3].value
+      const reviewInfo = {
+				score: score,
+        content: content,
+				username: review.item.username,
 			}
       axios({
         method: 'put',
-        url: `http://127.0.0.1:8000/movie/${this.movie.id}/review/${comment.item.id}/`,
-        data: commentInfo,
+        url: `http://127.0.0.1:8000/movies/${this.movie.id}/review/${review.item.id}/`,
+        data: reviewInfo,
         headers: this.setToken(),
       })
         .then(res => {
-          this.reviewList[comment.index].content = content
+          this.reviewList[review.index].score = score
+          this.reviewList[review.index].content = content
           return res
         })
         .catch(err => {
           console.log(err)
         })
     },
-    deleteComment: function (comment) {
+    // 리뷰삭제
+    deleteReview: function (review) {
       axios({
         method: 'delete',
-        url: `http://127.0.0.1:8000/community/${this.article.id}/comment/${comment.id}`,
+        url: `http://127.0.0.1:8000/movies/${this.movie.id}/review/${review.id}/`,
         data: {},
         headers: this.setToken(),
       })
         .then(res => {
-          const newComments = this.comments.filter(x => {
-            return x != comment
-          })
-          this.$store.dispatch('getComments', newComments)
-          return res
+          // const newReviews = this.reviewList.filter(x => {
+          //   return x != review
+          // })
+          this.getReviews()
+          
         })
         .catch(err => {
           console.log(err)
