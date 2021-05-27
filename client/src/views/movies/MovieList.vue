@@ -12,7 +12,7 @@
       v-for="(likegenre, idx) in likegenres"
       :key="idx"
       :likegenre="likegenre"
-      :genrename="genreList[idx]['name']"
+      :genrename="myGenres[idx]"
       />
     </div>
   </div>
@@ -35,7 +35,8 @@ export default {
     return {
       pickmovies: [],
       likegenres: '',
-      genreList: [],
+      myGenres: [],
+      checkGenres: [],
     }
   },
   created: function() {
@@ -72,6 +73,7 @@ export default {
       })
       .then((res)=>{
         // console.log(res.data)
+        // console.log(res.data)
         this.likegenres = res.data['data']
         // console.log(this.likegenres)
         // console.log(this.user.like_genres)
@@ -80,10 +82,34 @@ export default {
     // 사용자가 좋아하는 장르 이름 가져오기
     getGenres: function () {
       // console.log(this.genres)
-      console.log(this.user.like_genres)
-      this.genreList = this.genres.filter((genre) => {
-        return this.user.like_genres.includes(genre.id)
+      // console.log(this.user.like_genres.length)
+      // if (this.user.like_genres.lenth) {
+      //   this.genreList = this.genres.filter((genre) => {
+      //   return this.user.like_genres.includes(genre.id)
+      // })
+      // } else {
+
+
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8000/accounts/${this.user.username}/like_genre/`,
+        data: {},
+        headers: this.setToken(),
       })
+        .then(res => {
+          this.checkGenres = res.data.like_genres
+          // this.myGenres = this.checkGenres.join(', ')
+          // const myGenres = this.checkGenres
+          let Ge = []
+          for(let i=0; i<this.genres.length; i++){
+            if (this.checkGenres.includes(this.genres[i]['id'])) {
+              Ge.push(this.genres[i]['name'])
+            }
+          }
+          this.myGenres = Ge
+          console.log(this.myGenres)
+        })
+        
       // console.log(this.genreList)
       // [ { "id": 12, "name": "모험" }, { "id": 16, "name": "애니메이션" } ]
     },

@@ -109,7 +109,6 @@ export default {
       method: 'get',
       url: 'http://127.0.0.1:8000/movies/genres/',
       data: {},
-      headers: this.setToken()
     })
     .then((res)=> {
       this.$store.dispatch('getGenres', res.data)
@@ -119,7 +118,6 @@ export default {
       method: 'get',
       url: 'http://127.0.0.1:8000/movies/best/',
       data: {},
-      headers: this.setToken()
     })
     .then((res)=>{
       // console.log(res.data)
