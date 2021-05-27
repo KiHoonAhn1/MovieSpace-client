@@ -18,6 +18,7 @@ export default new Vuex.Store({
     comments: [],
     genres: [],
     bestMovies: [],
+    isLogin: false,
   },
   mutations: {
     GET_MOVIES: function (state, movies) {
@@ -34,12 +35,14 @@ export default new Vuex.Store({
     },
     GET_USER: function (state, user) {
       state.user = user
+      state.isLogin = true
     },
     GET_ANOTHER_USER: function (state, user) {
       state.anotherUser = user
     },
     LOGOUT: function (state) {
       state.user = {}
+      state.isLogin = false
     },
     GET_ARTICLES: function (state, articles) {
       state.articles = articles
@@ -50,6 +53,20 @@ export default new Vuex.Store({
     GET_COMMENTS: function (state, comments) {
       state.comments = comments
     },
+    DELETE_USER: function (state) {
+      state.user = []
+    },
+    IS_LOGIN: function (state, status) {
+      state.isLogin = status
+    },
+    UPDATE_USER: function (state, user) {
+      state.user.last_name = user.last_name
+      state.user.birth = user.birth
+      state.user.introduction = user.introduction
+      state.user.email = user.email
+      state.user.image = user.image
+      state.anotherUser = state.user
+    }
   },
   actions: {
     getMovies: function({commit}, movies) {
@@ -82,6 +99,15 @@ export default new Vuex.Store({
     getComments: function ({commit}, comments) {
       commit('GET_COMMENTS', comments)
     },
+    deleteUser: function ({commit}) {
+      commit('DELETE_USER')
+    },
+    isLogin: function ({commit}, status) {
+      commit('IS_LOGIN', status)
+    },
+    updateUser: function ({commit}, user) {
+      commit('UPDATE_USER', user)
+    }
 
   },
   getters: {

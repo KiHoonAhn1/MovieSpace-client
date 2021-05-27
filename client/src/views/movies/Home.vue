@@ -22,7 +22,7 @@
         </figure>
       </slide>
     </carousel-3d>
-   
+    
     <!-- 나중에 밑에 Genre를 쭉 뿌려주고 각각의 Component에 carousel을 넣어주면 될 것 같다. -->
     <!-- 뿌려주면서 장르를 넘겨주고 받아서 뿌려주면 된다. -->
     <h1 class="mt-5">Best Movies</h1>

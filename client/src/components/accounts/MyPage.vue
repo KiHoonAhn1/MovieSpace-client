@@ -34,6 +34,8 @@
 
 <script>
 import { mapState } from 'vuex'
+import axios from 'axios'
+
 export default {
   name: 'MyPage',
   data: function () {
@@ -59,28 +61,38 @@ export default {
     this.credentials.birth = this.user.birth
   },
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
     goPage5: function () {
       this.$emit("goPage5")
     },
     deleteUser: function () {
       let like = confirm('정말 탈퇴하시겠습니까?')
-      console.log(like)
-      // if (like) {
-      //   if (this.article.username === this.user.username) {
-      //     axios({
-      //       method: 'delete',
-      //       url: `http://127.0.0.1:8000/community/${this.article.id}/`,
-      //       data: '',
-      //       headers: this.setToken(),
-      //     })
-      //       .then(res => {
-      //         console.log(res)
-      //         this.$router.push({ name: 'ArticleList' })
-      //       })
-      //   } else {
-      //     alert('작성자만 삭제 가능합니다.')
-      //   }
-      // }
+      if (like) {
+      axios ({
+        method: 'delete',
+        url: `http://127.0.0.1:8000/accounts/${this.user.username}/profile/`,
+        data: this.credentials,
+        headers: this.setToken(),       
+      })
+        .then(res => {
+          this.$store.dispatch('logout')
+          return res
+        })
+        .then(res => {
+          this.$store.dispatch('deleteUser')
+          this.$router.push({ name:'Login' })
+          return res
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      }
     },
   },
   computed: {

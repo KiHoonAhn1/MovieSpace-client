@@ -17,16 +17,16 @@
               <label for="my_id">ID</label>
               <input type="text" placeholder="아이디를 입력해주세요" name="my_id" v-model="credentials.username" readonly>
               <label for="my_pwd">PASSWORD</label>
-              <input type="text" placeholder="비밀번호를 입력해주세요" name="my_pwd" v-model="credentials.password">
+              <input type="text" placeholder="비밀번호를 입력해주세요" name="my_pwd" v-model="credentials.password" required>
               <label for="my_name">NAME</label>
-              <input type="text" placeholder="이름을 입력해주세요" name="my_name" v-model="credentials.last_name">
+              <input type="text" placeholder="이름을 입력해주세요" name="my_name" v-model="credentials.last_name" required>
               <label for="my_email">EMAIL</label>
-              <input type="text" placeholder="이메일 혹은 github 주소를 입력해주세요" name="my_email" v-model="credentials.email">
+              <input type="text" placeholder="이메일 혹은 github 주소를 입력해주세요" name="my_email" v-model="credentials.email" required>
               <label for="my_email">INTRODUCTION</label>
-              <textarea class="project_description" rows="3" placeholder="인사말을 입력해주세요" v-model="credentials.introduction"></textarea>
+              <textarea class="project_description" rows="3" placeholder="인사말을 입력해주세요" v-model="credentials.introduction" required></textarea>
               <label for="my_email">BIRTH</label>
               <b-form-datepicker id="example-datepicker" style="width:85%" v-model="credentials.birth" class="ms-4 mb-2" ></b-form-datepicker>
-              <button class="project_submit" type="submit">Submit</button>
+              <button class="project_submit" type="button" @click="updateUser">Submit</button>
               <button class="project_submit project_cancel" type="submit" @click="goPage4">Cancel</button>
             </div>
         </div>
@@ -39,19 +39,22 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { mapState } from 'vuex'
+
 export default {
   name: 'MyUpdate',
   data: function () {
     return {
       credentials: {
-        image: '@/assets/img.jpg',
-        id: '',
+        username: '',
         password: '',
-        name: '',
+        last_name: '',
+        birth: '',
+        image: '',
         email: '',
         introduction: '',
-        birth: '',
+        // like_genres: '',
       }
     }
   },
@@ -63,10 +66,37 @@ export default {
     this.credentials.email = this.user.email
     this.credentials.introduction = this.user.introduction
     this.credentials.birth = this.user.birth
+    // this.credentials.like_genres = this.user.like_genres
   },
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
     goPage4: function () {
       this.$emit('goPage4')
+    },
+    updateUser: function () {
+      this.credentials.image = '@/assets/img.jpg'
+      axios({
+        method: 'put',
+        url: `http://127.0.0.1:8000/accounts/${this.user.username}/profile/`,
+        data: this.credentials,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          this.$store.dispatch('updateUser', res.data)
+          alert('정보가 수정되었습니다.')
+          this.$emit('goPage4')
+          return res
+        })
+        .catch(err => {
+          console.log(err)
+          alert('정보를 모두 입력해주세요.')
+        })
     },
   },
   computed: {

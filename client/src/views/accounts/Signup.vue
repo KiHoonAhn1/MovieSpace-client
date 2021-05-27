@@ -27,6 +27,9 @@
 
 <script>
 import axios from 'axios'
+import jwt from 'jsonwebtoken'
+
+const secretkey = 'django-insecure-y%n75jhzgb2h#p_rdwc&f6435(=fu7xg%4jmbosw7_hpwrt!h*'
 
 export default {
   name: 'Signup',
@@ -38,10 +41,18 @@ export default {
         passwordConfirmation: null,
         last_name: null,
         birth: null,
-      }
+      },
+      token: '',
     }
   },
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
     // 왜 send 버튼을 누르는데 한번에 이동되지 않고 2번 클릭해야 넘어갈까?
     signup: async function () {
       await axios({
@@ -49,36 +60,48 @@ export default {
         url: 'http://127.0.0.1:8000/accounts/signup/',
         data: this.credentials,
       })
-        .then(res => {
-          console.log(res)
+        .then(async res => {
+          await axios({
+            method: 'post',
+            url: 'http://127.0.0.1:8000/accounts/api-token-auth/',
+            data: this.credentials,
+          })
+            .then(res => {
+              localStorage.setItem('jwt', res.data.token)
+              this.token = res.data.token
+              return res
+            })
+            .catch(err => {
+              console.log(err)
+            })
+            return res
+          })
+        .then(async res => {
+          const decode = jwt.verify(this.token, secretkey)
+          console.log(decode)
+          await axios({
+            method: 'get',
+            url: `http://127.0.0.1:8000/accounts/${decode.username}`,
+            data: {},
+            headers: this.setToken()
+            })
+            .then(res => {
+              this.$store.dispatch('getUser', res.data)
+              this.$store.dispatch('isLogin', true)
+              this.$router.push({ name: 'Home' })
+              console.log(res)
+            })
+            .catch(err => {
+              console.log(err)
+            })
+            console.log(res)
         })
         .catch(err => {
           console.log(err)
           alert('정보를 모두 입력해주세요.')
         })
         /* jwt obtain 회원가입, 로그인 함께 처리하는 방법 고려 */
-      await axios({
-        method: 'post',
-        url: 'http://127.0.0.1:8000/accounts/api-token-auth/',
-        data: this.credentials,
-      })
-        .then(res => {
-          localStorage.setItem('jwt', res.data.token)
-          this.$emit('login')
-          this.$router.push({ name: 'Home' })
-        })
-        .catch(err => {
-          console.log(err)
-        })
-      // axios 요청을 너무 많이 보내는 것 같은데 괜찮을지 질문.
-      await axios.get(`http://127.0.0.1:8000/accounts/${this.credentials.username}`)
-        .then(res => {
-          this.$store.dispatch('getUser', res.data)
-          console.log(res)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+
     },
     text: function () {
       const label = document.querySelector('#signup__value_')

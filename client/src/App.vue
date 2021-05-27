@@ -19,22 +19,22 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <router-link to="/movielist" class="nav-link">추천</router-link>
+            <li class="nav-item fs-3">
+              <router-link to="/movielist" class="nav-link me-3">추천</router-link>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown fs-3">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 게시판
               </a>
               <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-                <li>
+                <li class="fs-4">
                   <a class="dropdown-item" href="#">최근 한줄평</a>
                 </li>
-                <li>
+                <li class="fs-4">
                   <router-link to="/articleList" class="dropdown-item">게시판</router-link>
                 </li>
                 <li><hr class="dropdown-divider bg-light"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li class="fs-4"><a class="dropdown-item" href="#">Something else here</a></li>
               </ul>
             </li>
           </ul>
@@ -45,35 +45,35 @@
           <!-- mouseover style을 줘야 한다. -->
           <div class="nav-item navbar p-0" v-if="isLogin">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img class="me-2" :src="user.image" style="width:40px; height:40px; border-radius:20px;" v-if="user.image">
-              <img class="me-2" src="@/assets/img.jpg" style="width:40px; height:40px; border-radius:20px;" v-else>
+              <!-- <img class="me-2" :src="user.image" style="width:40px; height:40px; border-radius:20px;" v-if="user.image"> -->
+              <img class="me-2" src="@/assets/img.jpg" style="width:40px; height:40px; border-radius:20px;">
               {{ user.username }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end bg-dark mt-4" style="font-size:20px;" aria-labelledby="navbarDropdown">
               <li @click="getAnotherUser">
-                <a class="dropdown-item" href="">내 정보</a>
+                <a class="dropdown-item fs-4" href="">내 정보</a>
               </li>
-              <li><a class="dropdown-item" href="#">플레이리스트</a></li>
+              <li class="fs-4"><a class="dropdown-item fs-4" href="#">플레이리스트</a></li>
               <li><hr class="dropdown-divider bg-light"></li>
               <li>
-                <a @click="logout" class="dropdown-item" href="#">로그아웃</a>
+                <a @click="logout" class="dropdown-item fs-4" href="#">로그아웃</a>
               </li>
             </ul>
           </div>
           <span v-else class="nav-item navbar">
             <ul class="navbar">
               <li class="navbar-nav">
-                <router-link to="/login" class="nav-link">로그인</router-link>
+                <router-link to="/login" class="nav-link fs-2">로그인</router-link>
               </li>
               <li class="navbar-nav">
-                <router-link to="/signup" class="nav-link">회원가입</router-link>
+                <router-link to="/signup" class="nav-link fs-2">회원가입</router-link>
               </li>
             </ul>
           </span>   
         </div>
       </div>
     </div>
-    <router-view @login="isLogin = true" :key="$route.fullPath" />
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 <script>
@@ -87,7 +87,6 @@ export default {
   name: 'App',
   data: function () {
     return {
-      isLogin: false,
       username: 'user',
       search: '',
     }
@@ -104,7 +103,7 @@ export default {
     // token이 있으면 로그인 처리
     const token = localStorage.getItem('jwt')
     if (token) {
-      this.isLogin = true
+      this.$store.dispatch('isLogin', true)
     }
     axios({
       method: 'get',
@@ -143,6 +142,7 @@ export default {
       input.classList.toggle("square");
     };
     searchBtn.addEventListener("click", expand);
+    this.user.image='img'
   },
   methods: {
     setToken: function () {
@@ -153,7 +153,6 @@ export default {
       return config
     },
     logout: function () {
-      this.isLogin = false
       localStorage.removeItem('jwt')
       this.$store.dispatch('logout')
       this.$router.push({ name: 'Login' })
@@ -188,6 +187,7 @@ export default {
   computed: {
     ...mapState ([
       'user',
+      'isLogin'
     ]),
   },
 
@@ -250,8 +250,10 @@ export default {
     height: 50px;
     width: 300px;
     margin-left: 170px;
-    top: 77%;
-    right: -20%;
+    /* top: 77%;
+    right: -20%; */
+    top: 75%;
+    right: -7%;
     transform: translate(-50%, -50%);
   }
 

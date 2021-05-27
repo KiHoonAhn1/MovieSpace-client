@@ -4,8 +4,8 @@
     <section class="clearfix">
       <div class="g2">
         <div class="photo">
-          <img :src="anotherUser.image" alt="Your alt text" v-if="anotherUser.image">
-          <img src="@/assets/img.jpg" alt="" v-else>
+          <!-- <img :src="anotherUser.image" alt="Your alt text" v-if="anotherUser.image"> -->
+          <img src="@/assets/img.jpg" alt="">
         </div>
         <div class="info">
           <h2 class="d-inline">
@@ -16,8 +16,8 @@
           <h4>
             {{ anotherUser.last_name }}
           </h4>
-          <p class="text-dark" v-if="anotherUser.description">
-            {{ anotherUser.description }}
+          <p class="text-dark" v-if="anotherUser.introduction">
+            {{ anotherUser.introduction }}
           </p>
           <p class="text-dark" v-else>
             인사말을 등록해주세요.
@@ -117,18 +117,16 @@
             <i class="icon-twitter"></i>
             <div class="item-data">
               <h3>
+                <img src="@/assets/google.jpg" class="m-0" style="width:20px; border-radius:10px;" id="e-img">
                 <a href="#" v-if="anotherUser.email">
-                  깃허브
-                </a>
-                <a href="#" v-else-if="anotherUser">
-                  이메일
+                  {{ anotherUser.email }}
                 </a>
                 <a href="#" v-else>
                   이메일을 등록해주세요.
                 </a>
               </h3>
-              <p>
-                Git URL or Email
+              <p id="e-tag">
+                {{ pValue }}
               </p>
             </div>
           </div>
@@ -151,6 +149,7 @@ export default {
     const dt = new Date().toLocaleDateString()
     this.date = dt
     this.followInfo()
+    this.setEmailLogo()
   },
   data: function () {
     return {
@@ -162,6 +161,7 @@ export default {
       followerUsers: [],
       followingCount: '',
       followedCount: '',
+      pValue: 'Git URL or Email',
     }
   },
   computed: {
@@ -247,6 +247,26 @@ export default {
           //   this.liked = false
           // }
         })
+    },
+    setEmailLogo: function () {
+      const img = document.querySelector('#e-img')
+      if (this.anotherUser.email.includes('google')) {
+        const image = require('@/assets/google.jpg')
+        img.setAttribute('src', image)
+        this.pValue = 'Google'
+      } else if (this.anotherUser.email.includes('github')) {
+        const image = require('@/assets/github.png')
+        img.setAttribute('src', image)
+        this.pValue = 'Github'
+      } else if (this.anotherUser.email.includes('naver')) {
+        const image = require('@/assets/naver.png')
+        img.setAttribute('src', image)
+        this.pValue = 'NAVER'
+      } else {
+        const image = require('@/assets/rocket.jpg')
+        img.setAttribute('src', image)
+        this.pValue = '주소가 없습니다'
+      }
     }
   }
 }
