@@ -1,42 +1,29 @@
 <template>
   <div>
     <div id="portfolio">
+    <!-- <div> -->
       <h3 class="fw-bolder">{{ anotherUser.username }} 님의 Playlists</h3>
       <h4 class="d-inline fw-bold">playlist 추가</h4>
       <img class="mb-2 ms-2" src="@/assets/plus.png" height="30px;" onclick="document.getElementById('modal-wrapper').style.display='block'" style="cursor:pointer;">
+    </div>
+    <div id="portfolio">
       <section class="clearfix">
         <div class="project-section">
           <div class="project-container">
-            <div class="project-img-container" onclick="document.getElementById('modal-wrapper1').style.display='block'">
+            <div class="project-img-container" onclick="document.getElementById('modal-playlist').style.display='block'">
               <img :src="'https://image.tmdb.org/t/p/w500' + movies[20].poster_path" alt="project image">
             </div>
             <p class="project-title text-dark">내 플레이리스트1</p>
           </div>
-          <div class="project-container">
-            <div class="project-img-container" onclick="document.getElementById('modal-wrapper1').style.display='block'">
-              <img :src="'https://image.tmdb.org/t/p/w500' + movies[3].poster_path" alt="project image">
+          <div class="project-container" v-for="(playlist, idx) in playlists" :key="idx">
+            <div class="project-img-container" @click="click_modal(playlist)">
+              <img :src="'https://image.tmdb.org/t/p/w500' + movies[18].poster_path" alt="project image">
             </div>
-            <p class="project-title text-dark">마블 모음</p>
-          </div>
-          <div class="project-container">
-            <div class="project-img-container" onclick="document.getElementById('modal-wrapper1').style.display='block'">
-              <img :src="'https://image.tmdb.org/t/p/w500' + movies[49].poster_path" alt="project image">
-            </div>
-            <p class="project-title text-dark">한국 영화</p>
-          </div>
-          <div class="project-container">
-            <div class="project-img-container" onclick="document.getElementById('modal-wrapper1').style.display='block'">
-              <img :src="'https://image.tmdb.org/t/p/w500' + movies[12].poster_path" alt="project image">
-            </div>
-            <p class="project-title text-dark">다시 볼 영화</p>
-          </div>
-          <div class="project-container">
-            <div class="project-img-container" onclick="document.getElementById('modal-wrapper1').style.display='block'">
-              <img :src="'https://image.tmdb.org/t/p/w500' + movies[32].poster_path" alt="project image">
-            </div>
-            <p class="project-title text-dark">공포 영화</p>
+            <p class="project-title text-dark">{{ playlist.list_name }}</p>
           </div>
         </div>
+
+        <!-- add playlist modal start -->
         <div id="modal-wrapper" class="modal">
           <form class="modal-content animate">
             <div class="imgcontainer">
@@ -45,36 +32,29 @@
               <h1 class="project_details" style="text-align:center">Playlist 추가</h1>
             </div>
             <div class="container">
-              <input type="text" placeholder="Project Name" name="uname" readonly>
-              <textarea class="project_description" rows="3" placeholder="Project Description" readonly></textarea>
-              <button class="project_submit" type="submit">Submit</button>
+              <input type="text" placeholder="Playlist Name" name="uname" v-model="playlist_info.list_name">
+              <textarea class="project_description" rows="3" placeholder="Playlist Description" v-model="playlist_info.list_description"></textarea>
+              <button class="project_submit" type="button" @click="addPlaylist">확인</button>
+              <button class="project_cancel" style="" type="submit" onclick="document.getElementById('modal-wrapper').style.display='none'">취소</button>
             </div>
           </form>
         </div>
-        <div id="modal-wrapper1" class="modal row">
-          <form class="modal-content1 animate">
-            <span onclick="document.getElementById('modal-wrapper1').style.display='none'" class="close" title="Close PopUp">&times;</span>
-            <div class="project-container">
-              <div class="project-img-container" onclick="document.getElementById('modal-wrapper1').style.display='block'">
-                <img :src="'https://image.tmdb.org/t/p/w500' + movies[32].poster_path" alt="project image">
-              </div>
+        <!-- add playlist modal end -->
+
+        <!-- modal playlist start -->
+        <div id="modal-playlist" class="modal">
+          <form class="modal-content animate">
+            <div class="imgcontainer">
+              <span onclick="document.getElementById('modal-playlist').style.display='none'" class="close" title="Close PopUp">&times;</span>
+              <img src="@/assets/rocket.jpg" alt="project" class="avatar">
+              <h1 class="project_details" style="text-align:center">{{ clicked_playlist.list_name }}</h1>
+              <textarea :value="clicked_playlist.list_description" class="project_description" rows="3" placeholder="Project Description" readonly></textarea>
             </div>
-            <div class="project-container">
-              <div class="project-img-container" onclick="document.getElementById('modal-wrapper1').style.display='block'">
-                <img :src="'https://image.tmdb.org/t/p/w500' + movies[32].poster_path" alt="project image">
-              </div>
+            <div class="container">
+              <div v-for="(playlist_movie, idx) in playlist_movies" :key="idx">{{ playlist_movie.title }}</div>
+              <button class="project_submit" type="button" onclick="document.getElementById('modal-playlist').style.display='none'">확인</button>
+              <button class="project_submit" style="background-color:red;" type="button" @click="deletePlaylist">삭제</button>
             </div>
-            <div class="project-container">
-              <div class="project-img-container" onclick="document.getElementById('modal-wrapper1').style.display='block'">
-                <img :src="'https://image.tmdb.org/t/p/w500' + movies[32].poster_path" alt="project image">
-              </div>
-            </div>
-            <div class="project-container">
-              <div class="project-img-container" onclick="document.getElementById('modal-wrapper1').style.display='block'">
-                <img :src="'https://image.tmdb.org/t/p/w500' + movies[32].poster_path" alt="project image">
-              </div>
-            </div>
-            <button class="project_submit" type="submit">Submit</button>
           </form>
         </div>
       </section>
@@ -83,7 +63,9 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { mapState } from 'vuex'
+
 export default {
   name: 'Playlists',
   computed: {
@@ -91,9 +73,118 @@ export default {
       'movies',
       'anotherUser',
       'user',
-      'playlists'
+      // 'playlists'
     ]),
   },
+  created: function () {
+    this.getPlaylists()
+
+  },
+  data: function () {
+    return {
+      playlist_info: {
+        list_name: '',
+        list_description: '',
+      },
+      playlists: [],
+      clicked_playlist: {},
+      playlist_movies: [],
+    }
+  },
+  methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+    click_modal: function (playlist) {
+      this.clicked_playlist = playlist
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8000/movies/${this.anotherUser.username}/${playlist.id}/movies`,
+        data: {},
+        headers: this.setToken(),
+      })
+        .then(res => {
+          this.playlist_movies = res.data.myMovies
+          return res
+        })
+        .then(res => {
+          const modal = document.querySelector('#modal-playlist')
+          modal.setAttribute('style', 'display:block;')
+          return res
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    getPlaylists: function () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8000/movies/${this.anotherUser.username}/playlist/`,
+        data: {},
+        headers: this.setToken()
+      })
+      .then(res => {
+        this.playlists = res.data
+        return res
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    addPlaylist: function () {
+      const playlist = {
+        list_name: this.playlist_info.list_name,
+        list_description: this.playlist_info.list_description,
+      }
+      axios({
+        method: 'post',
+        url: `http://127.0.0.1:8000/movies/${this.user.username}/playlist/`,
+        data: playlist,
+        headers: this.setToken()
+      })
+      .then(res => {
+        this.getPlaylists()
+        const modal = document.querySelector('#modal-wrapper')
+        modal.setAttribute('style', 'display:none;')
+        return res
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    deletePlaylist: function () {
+      axios({
+        method: 'delete',
+        url: `http://127.0.0.1:8000/movies/${this.user.username}/playlist/${this.clicked_playlist.id}`,
+        data: {},
+        headers: this.setToken()
+      })
+        .then(res => {
+          const modal = document.querySelector('#modal-playlist')
+          modal.setAttribute('style', 'display:none;')
+          this.getPlaylists()
+          return res
+        })
+        .then(err => {
+          console.log(err)
+        })
+    },
+    getMovies: function () {
+      axios({
+        method: 'get',
+        url: ``,
+        data: {},
+        headers: this.setToken()
+      })
+        .then(res => {
+          console.log(res)
+        })
+    }
+  }
 }
 </script>
 
@@ -996,7 +1087,7 @@ input[type=text], .project_description, input[type=url] {
 
 /* Set a style for all buttons */
 .project_submit {
-  background-color: #4CAF50;
+  background-color: #16d840;
   color: white;
   padding: 14px 20px;
   margin: 5px 26px;
@@ -1006,6 +1097,19 @@ input[type=text], .project_description, input[type=url] {
   font-size:20px;
 }
 .project_submit:hover {
+    opacity: 0.8;
+}
+.project_cancel {
+  background-color: #070630;
+  color: white;
+  padding: 14px 20px;
+  margin: 5px 26px;
+  border: none;
+  cursor: pointer;
+  width: 85%;
+  font-size:20px;
+}
+.project_cancel:hover {
     opacity: 0.8;
 }
 
@@ -1044,14 +1148,6 @@ input[type=text], .project_description, input[type=url] {
   padding-bottom: 20px;
 }
 
-.modal1-content {
-  background-color: #fefefe;
-  margin: 1% auto 1% auto;
-  border: 1px solid #888;
-  width: 80%;
-  padding-bottom: 20px;
-}
-
 /* The Close Button (x) */
 .close {
     position: absolute;
@@ -1067,10 +1163,6 @@ input[type=text], .project_description, input[type=url] {
 }
 
 /* Add Zoom Animation */
-.animate {
-    animation: zoom 0.6s
-}
-
 @keyframes zoom {
     from {transform: scale(0)}
     to {transform: scale(1)}
@@ -1401,4 +1493,8 @@ tbody {
   vertical-align: middle;
   display: grid;
 }
+.animate {
+    animation: zoom 0.6s
+}
+
 </style>

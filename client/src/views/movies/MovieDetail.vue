@@ -35,9 +35,31 @@
           <div class="d-flex">
             <i class="fas fa-heart fa-lg" style="color:crimson; cursor:pointer;"></i>
             <div class="ms-2">{{ likedCount }}명이 이 영화를 좋아합니다.</div>
+
             <div class="ms-5">
-              <i class="fas fa-plus text-success ms-5" style="cursor:pointer"></i>
+              <i class="fas fa-plus text-success ms-5" style="cursor:pointer" @click="addMovieModal"></i>
             </div>
+            <!-- add playlist modal start -->
+            <div id="addMovieModal" class="modal">
+              <form class="modal-content animate">
+                <div class="imgcontainer">
+                  <span onclick="document.getElementById('addMovieModal').style.display='none'" class="close" title="Close PopUp">&times;</span>
+                </div>
+                <div class="container text-dark">
+                  <p class="text-dark">선택한 playlist : {{ selectedPlaylist.list_name }}</p>
+                  <hr class="text-dark">
+                  <div class="w-100 px-4">
+                    <div v-for="(playlist, idx) in playlists" :key="idx" class="text-dark d-flex justify-content-between">
+                      {{ playlist.list_name }} 
+                      <button @click="clickPlaylist(playlist)" type="button">선택</button>
+                    </div>
+                  </div>
+                  <button class="project_submit" type="button"  @click="addMovie">추가</button>
+                  <button class="project_cancel" style="" type="button" onclick="document.getElementById('addMovieModal').style.display='none'">취소</button>
+                </div>
+              </form>
+            </div>
+            <!-- add playlist modal end -->
           </div>
           
           <div class="d-flex justify-content-between mt-4" >
@@ -158,6 +180,9 @@ export default {
       liked: '',
       likeusers: '',
       likedCount: '',
+      playlists: [],
+      selectedPlaylist: {},
+      
     }
   },
   components: {
@@ -240,6 +265,7 @@ export default {
       .then((res)=> {
         this.reviewList = res.data
         this.content = ''
+        this.score = ''
       })
       .catch((err) => {
         console.log(err)
@@ -360,12 +386,43 @@ export default {
           //   return x != review
           // })
           this.getReviews()
-          
+          return res
         })
         .catch(err => {
           console.log(err)
         })
-    }
+    },
+    getPlaylists: function () {
+      axios({
+        method: 'get',
+        url: `http://127.0.0.1:8000/movies/${this.user.username}/playlist/`,
+        data: {},
+        headers: this.setToken()
+      })
+      .then(res => {
+        this.playlists = res.data
+        return res
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    addMovieModal: function () {
+      const modal = document.querySelector('#addMovieModal')
+      modal.setAttribute('style', 'display:block;')
+      this.getPlaylists()
+    },
+    clickPlaylist: function (playlist) {
+      this.selectedPlaylist = playlist
+    },
+    addMovie:function () {
+      axios({
+        method: 'post',
+        url: `http://127.0.0.1:8000/movies/${this.user.username}/${this.selectedPlaylist.id}/${this.movie.id}/`,
+        data: {},
+        headers: this.setToken()
+      })
+    },
 
 
 
@@ -450,6 +507,81 @@ export default {
 .close:hover,.close:focus {
     color: red;
     cursor: pointer;
+}
+
+.modal {
+	display:none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+.avatar {
+    width: 175px;
+	height:175px;
+    border-radius: 50%;
+    margin: 0;
+}
+/* Modal Content Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 1% auto 1% auto;
+  border: 1px solid #888;
+  width: 30%;
+  padding-bottom: 20px;
+}
+
+.animate {
+    animation: zoom 0.6s
+}
+
+.imgcontainer {
+  text-align: center;
+  margin: 12px 0 6px 0;
+  position: relative;
+}
+
+input[type=text], .project_description, input[type=url] {
+  width: 85%;
+  padding: 12px 20px;
+  margin: 5px 26px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size:16px;
+}
+.project_description{
+  max-width: 85%;
+}
+.project_submit {
+  background-color: #16d840;
+  color: white;
+  padding: 14px 20px;
+  margin: 5px 26px;
+  border: none;
+  cursor: pointer;
+  width: 85%;
+  font-size:20px;
+}
+.project_submit:hover {
+    opacity: 0.8;
+}
+.project_cancel {
+  background-color: #070630;
+  color: white;
+  padding: 14px 20px;
+  margin: 5px 26px;
+  border: none;
+  cursor: pointer;
+  width: 85%;
+  font-size:20px;
+}
+.project_cancel:hover {
+    opacity: 0.8;
 }
 
 </style>

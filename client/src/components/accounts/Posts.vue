@@ -7,7 +7,7 @@
             게시물
           </h3>
             <small>
-              {{ this.articles.length }}개의 게시물이 있습니다
+              {{ articles.length }}개의 게시물이 있습니다
             </small>
           <div class="text-secondary text-end me-1 mb-2">
             <a href="#">
@@ -28,7 +28,7 @@
             댓글
           </h3>
           <small>
-            {{ this.comments.length }}개의 댓글이 있습니다
+            {{ comments.length }}개의 댓글이 있습니다
           </small>
           <div class="text-secondary text-end me-1 mb-2">
             <a href="#">
@@ -58,6 +58,7 @@ export default {
     return {
       articles10: [],
       comments10: [],
+      myArticles: '',
     }
   },
   computed: {
@@ -65,6 +66,14 @@ export default {
       'comments',
       'articles',
     ])
+  },
+  methods: {
+    getMyArticles: function () {
+      const myArticles = this.articles.filter(article => {
+        return article.username === this.anotherUser.username
+      })
+      this.myArticles = myArticles.length
+    },
   },
   created: function () {
     if (this.articles.length > 10) {
@@ -87,6 +96,7 @@ export default {
     }
   },
   mounted () {
+    this.getMyArticles()
     $(document).ready( function() {
 
       function animMeter(){
