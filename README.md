@@ -80,6 +80,7 @@
 
 
 ### iv. 필수 기능에 대한 설명 
+[유튜브 링크](https://www.youtube.com/watch?v=JNW73VgXfBM)
 
 #### 영화 정보
 
